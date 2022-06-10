@@ -5,7 +5,12 @@ const userRoutes = (app, fs) => {
     const dataPath = './data/users.json';
 
     // helper methods
-    const readFile = (callback, returnJson = false, filePath = dataPath, encoding = 'utf8') => {
+    const readFile = (
+      callback,
+      returnJson = false,
+      filePath = dataPath,
+      encoding = 'utf8'
+    ) => {
         fs.readFile(filePath, encoding, (err, data) => {
             if (err) {
                 throw err;
@@ -15,8 +20,12 @@ const userRoutes = (app, fs) => {
         });
     };
 
-    const writeFile = (fileData, callback, filePath = dataPath, encoding = 'utf8') => {
-
+    const writeFile = (
+      fileData,
+      callback,
+      filePath = dataPath,
+      encoding = 'utf8'
+    ) => {
         fs.writeFile(filePath, fileData, encoding, (err) => {
             if (err) {
                 throw err;
@@ -64,6 +73,7 @@ const userRoutes = (app, fs) => {
             // add the new user
             const userId = req.params["id"];
             data[userId] = req.body;
+            console.log(req.body);
 
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send(`users id:${userId} updated`);

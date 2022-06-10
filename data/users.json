@@ -1,9 +1,8 @@
 {
   "1": {
-    "name": "king arthur",
-    "password": "password1",
-    "profession": "king",
-    "id": 1
+    "test": "test",
+    "name": "hello world",
+    "data": "hello"
   },
   "2": {
     "name": "rob kendal",
@@ -16,5 +15,5 @@
     "password": "password2",
     "profession": "brexit destroyer",
     "id": 6
-  },
+  }
 }
