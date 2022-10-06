@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cyber Garden</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet"
+         href="https://fonts.googleapis.com/css?family=Roboto">
+
+</head>
+
+<body>
+  <div id="landing">
+    <label for="garden">Garden Health</label><progress id="garden" value="80" max="100"></progress>
+    <div id="garden_vis" class="center"></div>
+    <h3>Tap Card to Record Data or Water Garden</h3>
+  </div>
+
+  <div id="user">
+    <h1>Welcome Back <span id="fname">Stephanie</span>!
+    <h3>It's been <span id="days">4 days</span> since we last saw you.</h3>
+    <div id="options">
+    <div id="water" class="options"><h1>Water<br/>Garden</h1></div>
+    <div id="record" class="options"><h1>Record<br/>Data</h1></div>
+    </div>
+    <div class="buttons">
+      <button id="history">View My History</button>
+      <button id="log_out">Log Out</button>
+    </div>
+  </div>
+
+  <div id="w_garden">
+    Water Garden
+  </div>
+
+  <div id="r_data">
+    <h1>Place your hand on the sensor</h1>
+    <div id="sensorillustration" class="center"></div>
+    <div class="buttons">
+      <button id="cancel">Cancel</button>
+    </div>
+  </div>
+
+  <div id="r_inprogress">
+    <h1>Please keep hand on the sensor</h1>
+    <h3 id="inprogress">Reading in Progress</h3>
+    <div id="sensorillustration" class="center"></div>
+    <div class="buttons">
+      <button id="cancel">Cancel</button>
+    </div>
+  </div>
+
+  <div id="r_complete">
+    <h1>Reading is Complete!</h1>
+    <div id="sensorillustration" class="center"></div>
+    <div class="buttons">
+      <button id="cancel">Cancel</button>
+      <button id="continue_to_assessment">Continue</button>
+    </div>
+  </div>
+
+  <div id="start_assessment">
+    <h1>Please complete a stress assessment</h1>
+    <div id="stress_assessment" class="center"></div>
+    <div class="buttons">
+      <button id="cancel">Cancel</button>
+      <button id="to_question1">Continue</button>
+    </div>
+  </div>
+
+  <div id="question1">
+    <h1>How stressed have you felt over the last 24 hours?</h1>
+    <div class="wrap center">
+    <input type="range" min="1" max="100" value="50" class="slider" id="24_stress">
+    <div class="track">
+    <div class="track-inner"></div>
+    </div>
+    <div class="thumb"></div>
+    </div>
+    <div class="buttons">
+      <button id="cancel">Cancel</button>
+      <button id="to_question2">Continue</button>
+    </div>
+  </div>
+
+  <div id="question2">
+    <h1>How stressed do you feel in this moment?</h1>
+    <div class="wrap center">
+    <input type="range" min="1" max="100" value="50" class="slider" id="inst_stress">
+    <div class="track">
+    <div class="track-inner"></div>
+    </div>
+    <div class="thumb"></div>
+    </div>
+    <div class="buttons">
+      <button id="cancel">Cancel</button>
+      <button id="to_question3">Continue</button>
+    </div>
+  </div>
+
+  <div id="question3">
+    <h1>What is your energy level?</h1>
+    <div class="wrap center">
+    <input type="range" min="1" max="100" value="50" class="slider" id="energy">
+    <div class="track">
+    <div class="track-inner"></div>
+    </div>
+    <div class="thumb"></div>
+    </div>
+    <div class="buttons">
+      <button id="cancel">Cancel</button>
+      <button id="to_question4">Continue</button>
+    </div>
+  </div>
+
+  <script src="index.js" ></script>
+</body>
+
+</html>
