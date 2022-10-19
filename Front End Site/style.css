@@ -31,6 +31,7 @@ button:hover{
   border:none;
 }
 
+
 /* slider styling */
 .wrap {
   width: 300px;
@@ -80,7 +81,7 @@ button:hover{
 /* Landing Page Styling */
 
 #landing{
-  display:none;
+  display:block;
 }
 
 #garden_vis, #sensorillustration, #stress_assessment{
@@ -188,10 +189,27 @@ progress[value]::-webkit-progress-value{
 
 /* question 1 styling */
 
-#question1, #question2, #question3{
+#question1, #question2, #question3, #question4{
   display:none;
 }
 
 /* question 2 styling */
 
 /* question 3 styling */
+
+/* question 4 styling */
+#colorpicker{
+  width:300px;
+  height:200px;
+  border:none;
+  padding:3px;
+  background-color:#D9D9D9;
+}
+
+#r_complete{
+  display:none;
+}
+
+#user_reg{
+  display:none;
+}

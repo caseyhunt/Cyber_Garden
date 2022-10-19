@@ -1,6 +1,10 @@
-const range = document.querySelector('.slider')
-const thumb = document.querySelector('.thumb')
-const track = document.querySelector('.track-inner')
+document.getElementById("landing").style.display = 'block';
+
+for(let i=0; i<document.querySelectorAll(".slider").length;i++){
+
+const range = document.querySelectorAll('.slider')[i];
+const thumb = document.querySelectorAll('.thumb')[i];
+const track = document.querySelectorAll('.track-inner')[i];
 
 const updateSlider = (value) => {
   thumb.style.left = `${value}%`
@@ -12,19 +16,18 @@ range.oninput = (e) =>
   updateSlider(e.target.value)
 
 updateSlider(50) // Init value
+}
 
-
-
-
+// page 1 buttons
 document.getElementById("water").addEventListener("click", function(){swapPage("user", "w_garden")});
 document.getElementById("record").addEventListener("click", function(){swapPage("user", "r_data")});
 
 document.getElementById("water").addEventListener("touchstart", function(){swapPage("user", "w_garden")});
 document.getElementById("record").addEventListener("touchstart", function(){swapPage("user", "r_data")});
 
+//assessment buttons
 document.getElementById("continue_to_assessment").addEventListener("click", function(){swapPage("r_complete", "start_assessment")});
 document.getElementById("continue_to_assessment").addEventListener("touchstart", function(){swapPage("r_complete", "start_assessment")});
-
 
 document.getElementById("to_question1").addEventListener("click", function(){swapPage("start_assessment", "question1")});
 document.getElementById("to_question1").addEventListener("touchstart", function(){swapPage("start_assessment", "question1")});
@@ -42,3 +45,22 @@ function swapPage(oldPage, newPage){
 document.getElementById(oldPage).style.display = "none";
 document.getElementById(newPage).style.display = "block";
 }
+
+
+
+let userid = "";
+//rfid input
+document.addEventListener('keydown', function(event) {
+  if(document.getElementById("landing").style.display == "block"){
+    console.log(event.keyCode);
+    if(event.keyCode == 13){
+      console.log("user id is: " + userid);
+      swapPage("landing", "user");
+    }else{
+    userid += String.fromCharCode(event.keyCode);
+  }
+  }
+  else{
+    alert("Are you trying to log in? There is already a user logged in. Log out and try again.")
+  }
+});

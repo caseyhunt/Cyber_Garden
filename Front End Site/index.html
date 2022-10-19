@@ -13,7 +13,7 @@
   <div id="landing">
     <label for="garden">Garden Health</label><progress id="garden" value="80" max="100"></progress>
     <div id="garden_vis" class="center"></div>
-    <h3>Tap Card to Record Data or Water Garden</h3>
+    <h3>Tap BuffOne Card to Interact with the Garden</h3>
   </div>
 
   <div id="user">
@@ -26,6 +26,28 @@
     <div class="buttons">
       <button id="history">View My History</button>
       <button id="log_out">Log Out</button>
+    </div>
+  </div>
+
+  <div id="user_reg">
+    <h1>Welcome to CyberGarden!</h1>
+    <h3>Please enter your information below to register to use the display</h3>
+    <form>
+      <label for="fname">First name:</label>
+      <input type="text" id="fname" name="fname"><br>
+      <label for="lname">Last name:</label>
+      <input type="text" id="lname" name="lname"><br>
+      <label for="degree">What degree are you seeking at CU?</label><br>
+      <input type="radio" id="bachelor" name="degree" value="bachelor">
+      <label for="bachelor">Bachelor's</label>
+      <input type="radio" id="master" name="degree" value="master">
+      <label for="master">Master's</label>
+      <input type="radio" id="doctor" name="degree" value="doctor">
+      <label for="master">PhD</label>
+    </form>
+    <div class="buttons">
+      <button id="continue_to_user">Continue</button>
+      <button id="cancel">Cancel</button>
     </div>
   </div>
 
@@ -86,7 +108,7 @@
   <div id="question2">
     <h1>How stressed do you feel in this moment?</h1>
     <div class="wrap center">
-    <input type="range" min="1" max="100" value="50" class="slider" id="inst_stress">
+    <input type="range" min="1" max="100" value="50" class="slider" id="24_stress">
     <div class="track">
     <div class="track-inner"></div>
     </div>
@@ -111,6 +133,11 @@
       <button id="cancel">Cancel</button>
       <button id="to_question4">Continue</button>
     </div>
+  </div>
+
+  <div id="question4">
+    <h1>Pick a color that represents your mood</h1>
+    <input type="color" value="#ff0000" id="colorpicker">
   </div>
 
   <script src="index.js" ></script>
