@@ -52,8 +52,9 @@ let userid = "";
 //rfid input
 document.addEventListener('keydown', function(event) {
   if(document.getElementById("landing").style.display == "block"){
-    console.log(event.keyCode);
-    if(event.keyCode == 13){
+    // console.log(event.keyCode);
+
+    if(event.keyCode == "13"){
       console.log("user id is: " + userid);
       swapPage("landing", "user");
     }else{
@@ -64,3 +65,34 @@ document.addEventListener('keydown', function(event) {
     alert("Are you trying to log in? There is already a user logged in. Log out and try again.")
   }
 });
+
+$(document).ready(function () {
+  let endpoint = "http://127.0.0.1:3001/users";
+        $.ajax({
+          //beforeSend: function (jqXHR, settings) { jqXHR.setRequestHeader("Access-Control-Allow-Origin", "*");},
+            type: "get",
+            url: endpoint,
+            //url: endpoint + "?key=" + apiKey,
+            //dataType: 'jsonp',
+        }).done(
+        function(data){
+    console.log("Data: " + JSON.stringify(data));
+  });
+    });
+
+    $(document).ready(function () {
+      let endpoint = "http://127.0.0.1:3001/users";
+      let userID = "hello 1234567";
+      let data = {"command":"on", "test": "true"}
+            $.ajax({
+              //beforeSend: function (jqXHR, settings) { jqXHR.setRequestHeader("Access-Control-Allow-Origin", "*");},
+                type: "put",
+                data: data,
+                url: endpoint + "/" + userID,
+                //url: endpoint + "?key=" + apiKey,
+                //dataType: 'jsonp',
+            }).done(
+            function(data){
+        console.log("Data: " + JSON.stringify(data));
+      });
+        });

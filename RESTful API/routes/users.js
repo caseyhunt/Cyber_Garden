@@ -52,11 +52,11 @@ const userRoutes = (app, fs) => {
         readFile(data => {
             // Note: this isn't ideal for production use.
             // ideally, use something like a UUID or other GUID for a unique ID value
-            const newUserId = Date.now().toString();
-
+          //  const newUserId = Date.now().toString();
+            const newUserId = req.query.id;
             // add the new user
             data[newUserId.toString()] = req.body;
-
+            console.log(req.body);
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send('new user added');
             });
@@ -80,6 +80,20 @@ const userRoutes = (app, fs) => {
             });
         },
             true);
+    });
+
+    app.get('/users/:id', (req, res) => {
+
+      fs.readFile(dataPath, 'utf8', (err, data) => {
+          if (err) {
+              throw err;
+          }
+
+          const userId = req.params["id"];
+          const obj = JSON.parse(data);
+          console.log(obj[userId]);
+          res.send(obj[userId]);
+      });
     });
 
 
