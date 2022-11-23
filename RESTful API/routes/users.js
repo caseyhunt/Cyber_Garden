@@ -46,17 +46,12 @@ const userRoutes = (app, fs) => {
         });
     });
 
-    // CREATE
-    app.post('/users', (req, res) => {
+    // add user session date
+    app.post('/users/:id', (req, res) => {
 
         readFile(data => {
-            // Note: this isn't ideal for production use.
-            // ideally, use something like a UUID or other GUID for a unique ID value
-          //  const newUserId = Date.now().toString();
-            const newUserId = req.query.id;
-            // add the new user
-            data[newUserId.toString()] = req.body;
-            console.log(req.body);
+            const userId = req.params["id"];
+            data[userId]["last_login"] = req.body.last_login;
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send('new user added');
             });
@@ -73,6 +68,7 @@ const userRoutes = (app, fs) => {
             // add the new user
             const userId = req.params["id"];
             data[userId] = req.body;
+            console.log(userId);
             console.log(req.body);
 
             writeFile(JSON.stringify(data, null, 2), () => {

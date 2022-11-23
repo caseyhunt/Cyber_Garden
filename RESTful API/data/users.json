@@ -1,74 +1,20 @@
 {
-  "1": {
-    "test": "yikes",
-    "name": "hello world",
-    "data": "hello"
+  "D315E53E": {
+    "name": [
+      "Casey",
+      "Hunt"
+    ],
+    "email": "casey.hunt@colorado.edu",
+    "degree": "dr",
+    "last_login": "Mon Nov 14 2022 19:21:11 GMT-0700 (Mountain Standard Time)"
   },
-  "2": {
-    "name": "rob kendal",
-    "password": "password3",
-    "profession": "code fiddler",
-    "id": 2
-  },
-  "3": {
-    "name": "teresa may",
-    "password": "password2",
-    "profession": "brexit destroyer",
-    "id": 6
-  },
-  "123456": {
-    "{ \"command\": \"on\" }": ""
-  },
-  "stuff": {
-    "test": "four",
-    "name": "hello world",
-    "data": "hello"
-  },
-  "1667340614857": {
-    "test": "this is not a test",
-    "name": "hello world",
-    "data": "hello"
-  },
-  "1667341875450": {
-    "test": "test",
-    "name": "hello world",
-    "data": "hello"
-  },
-  "1667341887904": {
-    "test": "test",
-    "name": "hello world",
-    "data": "hello"
-  },
-  "1667341913716": {
-    "test": "test",
-    "name": "hello world",
-    "data": "hello"
-  },
-  "1667341950162": {
-    "test": "test",
-    "name": "hello world",
-    "data": "hello"
-  },
-  "1667342003896": {
-    "'test'": "'test user'",
-    "\"key\"": "\"key test\"",
-    "\"another key\"": "\"another test\""
-  },
-  "129038217849321": {
-    "test": "not a test",
-    "name": "hello world",
-    "data": "hello"
-  },
-  "456891329874": {
-    "test": "not a test",
-    "name": "hello world",
-    "data": "hello"
-  },
-  "hello 123456": {
-    "{\"command\":\"on\"}": ""
-  },
-  "hello 1234567": {
-    "command": "on",
-    "test": "true"
+  "nA3E309A3": {
+    "name": [
+      "Casey",
+      "Hunt"
+    ],
+    "email": "casey.hunt@colorado.edu",
+    "degree": "dr",
+    "last_login": "Mon Nov 14 2022 19:25:56 GMT-0700 (Mountain Standard Time)"
   }
 }

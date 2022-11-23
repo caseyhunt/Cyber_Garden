@@ -17,14 +17,13 @@
   </div>
 
   <div id="user">
-    <h1>Welcome Back <span id="fname">Stephanie</span>!
-    <h3>It's been <span id="days">4 days</span> since we last saw you.</h3>
+    <h1>Welcome <span id="uname">Back Name</span>!
+    <h3 id="itsbeen"></h3>
     <div id="options">
     <div id="water" class="options"><h1>Water<br/>Garden</h1></div>
     <div id="record" class="options"><h1>Record<br/>Data</h1></div>
     </div>
     <div class="buttons">
-      <button id="history">View My History</button>
       <button id="log_out">Log Out</button>
     </div>
   </div>
@@ -33,21 +32,25 @@
     <h1>Welcome to CyberGarden!</h1>
     <h3>Please enter your information below to register to use the display</h3>
     <form>
-      <label for="fname">First name:</label>
+      <div id="#form-flex">
+      <label for="fname" class="inline_input">First name:</label>
       <input type="text" id="fname" name="fname"><br>
-      <label for="lname">Last name:</label>
+      <label for="lname" class="inline_input">Last name:</label>
       <input type="text" id="lname" name="lname"><br>
+      <label for="email" class="inline_input">Email:</label>
+      <input type="text" id="email" name="email"><br>
+    </div>
       <label for="degree">What degree are you seeking at CU?</label><br>
-      <input type="radio" id="bachelor" name="degree" value="bachelor">
+      <input type="radio" id="bachelor" name="degree" value="b">
       <label for="bachelor">Bachelor's</label>
-      <input type="radio" id="master" name="degree" value="master">
+      <input type="radio" id="master" name="degree" value="m">
       <label for="master">Master's</label>
-      <input type="radio" id="doctor" name="degree" value="doctor">
+      <input type="radio" id="doctor" name="degree" value="dr">
       <label for="master">PhD</label>
     </form>
     <div class="buttons">
+      <button id="cancel_registration">Cancel</button>
       <button id="continue_to_user">Continue</button>
-      <button id="cancel">Cancel</button>
     </div>
   </div>
 
@@ -59,7 +62,8 @@
     <h1>Place your hand on the sensor</h1>
     <div id="sensorillustration" class="center"></div>
     <div class="buttons">
-      <button id="cancel">Cancel</button>
+      <button id="cancel_sensor">Cancel</button>
+      <button id="hand_sensor">Continue</button>
     </div>
   </div>
 
@@ -140,6 +144,7 @@
     <input type="color" value="#ff0000" id="colorpicker">
   </div>
 
+  <script src="functions.js" type="text/javascript"></script>
   <script src="index.js" ></script>
 </body>
 

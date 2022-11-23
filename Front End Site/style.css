@@ -81,7 +81,7 @@ button:hover{
 /* Landing Page Styling */
 
 #landing{
-  display:block;
+  display:none;
 }
 
 #garden_vis, #sensorillustration, #stress_assessment{
@@ -210,6 +210,26 @@ progress[value]::-webkit-progress-value{
   display:none;
 }
 
+/* user registration page */
 #user_reg{
   display:none;
+}
+
+#form-flex{
+  #margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 60%;
+  gap: 10px;
+}
+
+input{
+  height: 15px;
+  margin-bottom: 5px;
+}
+
+.inline_input{
+  display:inline-block;
+  width:18% !important;
+  text-align: left;
 }
