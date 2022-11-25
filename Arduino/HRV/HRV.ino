@@ -38,11 +38,15 @@ const int arrS = 4;
 const int arrSize = 100;
 float mySensVals[arrS];
 float myHRVals[arrSize];
+float myBPMVals[arrSize];
 int rmssdd;
 bool rising[2];
 long lastBeat;
 long delta;
 float bpm = 0;
+float difference;
+float variance;
+float bpmavg;
 
 void setup()
 {
@@ -94,37 +98,50 @@ void loop()
 
   for (int i = (arrS-1); i >=0; i--) {
     mySensVals[i+1] = mySensVals[i];
-//    Serial.print("sensor value array ");
-//    Serial.print(i);
-//    Serial.print(" ");
-//    Serial.println(mySensVals[i]);
-//    Serial.println(mySensVals[i+1]);
   }
 
 
   for (int i = (arrSize-1); i >=0; i--) {
     myHRVals[i+1] = myHRVals[i];
-//    Serial.print("sensor value array ");
-//    Serial.print(i);
-//    Serial.print(" ");
-//    Serial.println(myHRVals[i]);
+    myBPMVals[i+1] = myBPMVals[i];
   }
-//  Serial.print("hrvals");
-//  Serial.println(myHRVals[arrSize]);
-//  Serial.println(myHRVals[arrSize-1]);
+
+
+//if the number of heart rate interval readings is equal to the length of the array
+//calculate sdnn and output this value over serial
   if(myHRVals[arrSize] > 0){
-    float rmssd = 0;
-    for(int i=0;i<(arrSize-1);i++){
-      rmssd += sq(myHRVals[i]-myHRVals[i+1]);
-      rmssdd += 1;
+    float sdnn = 0;
+    for(int i=0;i<(arrSize);i++){
+      bpmavg += myBPMVals[i];
+      sdnn += myHRVals[i];
+//      Serial.println(i);
+      Serial.println(myHRVals[i]);
+      
     }
-    for(int i=0; i<arrSize;i++){
-      myHRVals[i]=0;
+    float average = sdnn/arrSize;
+     for(int i=0;i<(arrSize);i++){
+      variance += sq(myHRVals[i] - average);
+//      Serial.println(i);
+//      Serial.println(myHRVals[i]);
+      
     }
-    rmssd = float(rmssd)/float(rmssdd);
-    rmssd = sqrt(rmssd);
-    Serial.print("rmssd =");
-    Serial.println(rmssd);
+    Serial.print("average variance:");
+    Serial.println(average);
+    variance = variance/arrSize;
+    bpmavg = bpmavg/arrSize;
+    sdnn = sqrt(variance/(arrSize-1));
+    Serial.print("sdnn =");
+    Serial.println(sdnn);
+    Serial.print("average bpm = ");
+    Serial.println(bpmavg);
+   
+    for(int i=0;i<(arrSize);i++){
+      myHRVals[i] = 0;
+      myBPMVals[i] = 0;
+//      Serial.println(i);
+//      Serial.println(myHRVals[i]);
+      
+    }
   }
 
   for (int i = (2-1); i >=0; i--) {
@@ -146,31 +163,40 @@ if (irValue > -10000 || irValue<-30000 ){
   Serial.println();
 
 }else{
+//   Serial.println(float(irValue)/15000);
     if(mySensVals[0]>mySensVals[1]){
-//    Serial.println("rising beat");
+      
+    //Serial.println("rising beat");
     rising[0]=true;
   }else{
-//    Serial.println("falling beat");
+    //Serial.println("falling beat");
     if(rising[0] == true && rising[1]==true){
-     Serial.println("peak");
+//     Serial.println("peak");
+//     Serial.println(millis());
+//     Serial.println(lastBeat);
     delta = millis()-lastBeat;
     bpm = (float(60)/float(delta))*float(1000);
+    myBPMVals[0] = bpm;
+    difference = float(1000)/float(bpm);
     lastBeat = millis();
   if(delta>2500){
     Serial.println("first beat");
-    memset(mySensVals,0,arrSize);
+    memset(mySensVals,0,arrS);
+    memset(myHRVals,0,arrSize);
 //     for(int i=0; i<arrSize;i++){
 //      mySensVals[i]=0;
 //    }
-    for(int i=0; i<arrS; i++){
-      myHRVals[i] = 0;
-    }
+//    for(int i=0; i<arrS; i++){
+//      myHRVals[i] = 0;
+//    }
   }else{
-//    Serial.println(delta);
-//    Serial.print("beats per min ");
-//    Serial.println(bpm);
-    myHRVals[0] = bpm;
-    mySensVals[0] = delta;
+    
+    Serial.print("bpm");
+    Serial.println(bpm);
+    myHRVals[0] = delta;
+    Serial.print("delta");
+    Serial.println(myHRVals[0]);
+    mySensVals[0] = irValue;
   }
     }
     rising[0] = false;
