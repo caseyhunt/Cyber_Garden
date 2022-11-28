@@ -122,6 +122,8 @@ for (int i = (arrS-1); i >=0; i--) {
     }
     Serial.print("average hrv:");
     Serial.println(average);
+    Serial.println("Total Variance:");
+    Serial.println(variance);
     variance = variance/(arrSize-1);
     Serial.print("hrv variance:");
     Serial.println(variance);
