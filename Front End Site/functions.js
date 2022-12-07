@@ -26,7 +26,7 @@ function daysSince(date){
   return diff;
 }
 
-function openPort(){
+async function openPort(){
   console.log("serial menu opening");
   port = await navigator.serial.requestPort();
   // Wait for the serial port to open.
@@ -34,6 +34,7 @@ function openPort(){
   console.log(port);
 
   while (port.readable) {
+    document.getElementById("open_port").style.display = "none";
     const textDecoder = new TextDecoderStream();
     const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
     const reader = textDecoder.readable.getReader();
@@ -50,6 +51,18 @@ function openPort(){
         }
         // Do something with |value|…
         console.log(value);
+        console.log(String(value).slice(0, 5) == "start");
+        if(String(value).slice(0, 5) == "start" && document.getElementById("r_data").style.display == "block"){
+          console.log("switching page");
+          swapPage("r_data", "r_inprogress");
+
+
+        }
+
+        if(value==25 && document.getElementById("r_inprogress").style.display == "block"){
+          console.log("switching page");
+          swapPage("r_inprogress", "r_complete");
+        }
       }
     } catch (error) {
       // Handle |error|…
@@ -57,7 +70,7 @@ function openPort(){
       reader.releaseLock();
     }
   }
-})
+}
 
 async function writeserial(message) {
   while(port.writable){
@@ -157,17 +170,26 @@ for(let i=0; i<document.querySelectorAll(".slider").length;i++){
 
   //update slider value when user interacts with slider
   range.oninput = (e) =>{
-    updateSlider(e.target.value)
-    updateSlider(50) // Init value
+    updateSlider(e.target.value);
+    let pageno = activepage.slice(-1);
+    user_values[pageno] = e.target.value;
+    console.log(user_values);
+    //updateSlider(50) // Init value
   }
 }
 }
 
 //this is a requirement of the current slider styling
 const updateSlider = (value) => {
-  thumb.style.left = `${value}%`
-  thumb.style.transform = `translate(-${value}%, -50%)`
-  track.style.width = `${value}%`
+  //console.log(activepage);
+  let pageno = activepage.slice(-1);
+  pageno = parseInt(pageno)-1;
+  let thumb = document.querySelectorAll('.thumb')[pageno];
+  let track = document.querySelectorAll('.track-inner')[pageno];
+  thumb.style.left = `${value}%`;
+  thumb.style.transform = `translate(-${value}%, -50%)`;
+  track.style.width = `${value}%`;
+  
 }
 
 

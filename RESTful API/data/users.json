@@ -16,5 +16,32 @@
     "email": "casey.hunt@colorado.edu",
     "degree": "dr",
     "last_login": "Mon Nov 14 2022 19:25:56 GMT-0700 (Mountain Standard Time)"
+  },
+  "A3E309A3": {
+    "name": [
+      "Casey",
+      "Hunt"
+    ],
+    "email": "casey.hunt@colorado.edu",
+    "degree": "dr",
+    "last_login": "Thu Dec 01 2022 13:16:16 GMT-0700 (Mountain Standard Time)"
+  },
+  "60E91293": {
+    "name": [
+      "c",
+      "h"
+    ],
+    "email": "c@h.com",
+    "degree": "b",
+    "last_login": "Thu Dec 01 2022 15:15:52 GMT-0700 (Mountain Standard Time)"
+  },
+  "\u0011\u0010I60E91293": {
+    "name": [
+      "c",
+      "h"
+    ],
+    "email": "c@h.com",
+    "degree": "b",
+    "last_login": "Thu Dec 01 2022 14:41:05 GMT-0700 (Mountain Standard Time)"
   }
 }

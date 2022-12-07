@@ -189,7 +189,7 @@ progress[value]::-webkit-progress-value{
 
 /* question 1 styling */
 
-#question1, #question2, #question3, #question4{
+#question1, #question2, #question3, #question4, #overview{
   display:none;
 }
 
@@ -198,16 +198,20 @@ progress[value]::-webkit-progress-value{
 /* question 3 styling */
 
 /* question 4 styling */
-#colorpicker{
-  width:300px;
-  height:200px;
-  border:none;
-  padding:3px;
-  background-color:#D9D9D9;
+#picker{
+  padding: 10px 0px;
 }
 
 #r_complete{
   display:none;
+}
+
+.IroWheel{
+  margin:auto;
+}
+
+.IroSlider{
+  margin-left: calc(50vw - 90px);
 }
 
 /* user registration page */

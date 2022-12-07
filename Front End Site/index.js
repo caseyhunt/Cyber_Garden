@@ -1,16 +1,40 @@
 //id of acive page (page being displayed)
-let activepage = "landing";
+let activepage = "question1";
 
 //start by displaying the landing page
-document.getElementById("landing").style.display = 'block';
+document.getElementById("question1").style.display = 'block';
 
 
 
 let active_user = {};
+let user_values = [];
 
 initSliders();
-openPort();
 
+var colorPicker = new iro.ColorPicker("#picker", {
+    width:150,
+    height:150,
+    layout: [
+      {
+        component: iro.ui.Wheel
+      },
+      {
+        component: iro.ui.Slider,
+        options: {
+          sliderType: "value"
+        }
+      },
+    ]
+  });
+
+  colorPicker.on('color:change', function(color) {
+    // log the current color as a HEX string
+    console.log(color.hexString);
+    document.getElementById("picker").style.backgroundColor = color.hexString;
+  });
+
+//open serial port
+document.getElementById("open_port").addEventListener("click", openPort);
 
 // welcome page buttons
 document.getElementById("water").addEventListener("click", function(){swapPage("user", "w_garden")});
@@ -52,6 +76,10 @@ document.getElementById("continue_to_user").addEventListener("touchstart", submi
 
 document.getElementById("cancel_registration").addEventListener("click", function(){swapPage("user_reg", "landing")});
 document.getElementById("cancel_registration").addEventListener("touchstart", function(){swapPage("user_reg", "landing")});
+
+document.getElementById("cancel").addEventListener("click", function(){swapPage(activepage, "user")});
+
+document.getElementById("to_overview").addEventListener("click", function(){swapPage(activePage, )})
 
 
 
