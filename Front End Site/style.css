@@ -189,7 +189,7 @@ progress[value]::-webkit-progress-value{
 
 /* question 1 styling */
 
-#question1, #question2, #question3, #question4, #overview{
+#question1, #question2, #question3, #question4, #question5, #assessment_complete, #overview, #recorded_result{
   display:none;
 }
 
@@ -200,6 +200,7 @@ progress[value]::-webkit-progress-value{
 /* question 4 styling */
 #picker{
   padding: 10px 0px;
+  margin: 0px 30vw;
 }
 
 #r_complete{
@@ -211,7 +212,27 @@ progress[value]::-webkit-progress-value{
 }
 
 .IroSlider{
-  margin-left: calc(50vw - 90px);
+  margin-left: calc(20vw - 90px);
+}
+
+/* question 5 styling */
+
+#pam{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  margin:auto;
+  gap:5px;
+  max-width:360px;
+  width:auto;
+}
+
+#pam img{
+  max-width:90px;
+}
+
+.selected_pam{
+  outline: 4px solid rgb(253, 0, 0);
 }
 
 /* user registration page */

@@ -24,7 +24,7 @@
     ],
     "email": "casey.hunt@colorado.edu",
     "degree": "dr",
-    "last_login": "Thu Dec 01 2022 13:16:16 GMT-0700 (Mountain Standard Time)"
+    "last_login": "Sat Dec 10 2022 14:28:14 GMT-0700 (Mountain Standard Time)"
   },
   "60E91293": {
     "name": [
@@ -43,5 +43,41 @@
     "email": "c@h.com",
     "degree": "b",
     "last_login": "Thu Dec 01 2022 14:41:05 GMT-0700 (Mountain Standard Time)"
+  },
+  "041851FA0D5980041851FA0D5980": {
+    "name": [
+      "Casey",
+      "Hunt"
+    ],
+    "email": "casey.hunt@colorado.edu",
+    "degree": "m",
+    "last_login": "Sat Dec 10 2022 14:17:26 GMT-0700 (Mountain Standard Time)"
+  },
+  "AAA333EEE333000999AAA333": {
+    "name": [
+      "casey",
+      "hunt"
+    ],
+    "email": "casey.hunt@colorado.edu",
+    "degree": "dr",
+    "last_login": "Sat Dec 10 2022 14:28:14 GMT-0700 (Mountain Standard Time)"
+  },
+  "004411885511FFAA00DD55998800": {
+    "name": [
+      "Casey",
+      "Hunt"
+    ],
+    "email": "casey.hunt@colorado.edu",
+    "degree": "b",
+    "last_login": "Sat Dec 10 2022 14:28:14 GMT-0700 (Mountain Standard Time)"
+  },
+  "AAAA3333EEEE333300009999AAAA3333": {
+    "name": [
+      "Casey",
+      "Hunt"
+    ],
+    "email": "casey.hunt@colorado.edu",
+    "degree": "b",
+    "last_login": "Sat Dec 10 2022 14:23:10 GMT-0700 (Mountain Standard Time)"
   }
 }

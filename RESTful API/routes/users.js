@@ -87,6 +87,7 @@ const userRoutes = (app, fs) => {
 
           const userId = req.params["id"];
           const obj = JSON.parse(data);
+          console.log("recieved request for uid: " + userId);
           console.log(obj[userId]);
           res.send(obj[userId]);
       });

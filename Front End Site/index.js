@@ -1,8 +1,8 @@
 //id of acive page (page being displayed)
-let activepage = "question1";
+let activepage = "landing";
 
 //start by displaying the landing page
-document.getElementById("question1").style.display = 'block';
+document.getElementById("landing").style.display = 'block';
 
 
 
@@ -10,28 +10,8 @@ let active_user = {};
 let user_values = [];
 
 initSliders();
-
-var colorPicker = new iro.ColorPicker("#picker", {
-    width:150,
-    height:150,
-    layout: [
-      {
-        component: iro.ui.Wheel
-      },
-      {
-        component: iro.ui.Slider,
-        options: {
-          sliderType: "value"
-        }
-      },
-    ]
-  });
-
-  colorPicker.on('color:change', function(color) {
-    // log the current color as a HEX string
-    console.log(color.hexString);
-    document.getElementById("picker").style.backgroundColor = color.hexString;
-  });
+initColorPicker();
+populatePAM();
 
 //open serial port
 document.getElementById("open_port").addEventListener("click", openPort);
@@ -77,9 +57,18 @@ document.getElementById("continue_to_user").addEventListener("touchstart", submi
 document.getElementById("cancel_registration").addEventListener("click", function(){swapPage("user_reg", "landing")});
 document.getElementById("cancel_registration").addEventListener("touchstart", function(){swapPage("user_reg", "landing")});
 
-document.getElementById("cancel").addEventListener("click", function(){swapPage(activepage, "user")});
+//document.getElementById("cancel").addEventListener("click", function(){swapPage(activepage, "user")});
 
-document.getElementById("to_overview").addEventListener("click", function(){swapPage(activePage, )})
+document.getElementById("to_question5").addEventListener("click", function(){swapPage("question4", "question5")});
+
+document.getElementById("to_complete").addEventListener("click", function(){swapPage("question5", "assessment_complete")});
+
+document.getElementById("to_overview").addEventListener("click", function(){swapPage("assessment_complete", "overview")});
+
+document.getElementById("to_record_result").addEventListener("click", function(){swapPage("overview", "recorded_result")});
+
+document.getElementById("complete").addEventListener("click", function(){swapPage("recorded_result", "landing")});
+
 
 
 
@@ -87,4 +76,6 @@ document.getElementById("to_overview").addEventListener("click", function(){swap
 
 if(activepage == "landing"){
 scanRFID();
+active_user = {};
+user_values = [];
 }

@@ -6,6 +6,9 @@ activepage = newPage;
 if(activepage == "landing"){
   user_id = "";
   user_data = undefined;
+  scanRFID();
+  active_user = {};
+  user_values = [];
 }
 document.getElementById(oldPage).style.display = "none";
 document.getElementById(newPage).style.display = "block";
@@ -171,9 +174,15 @@ for(let i=0; i<document.querySelectorAll(".slider").length;i++){
   //update slider value when user interacts with slider
   range.oninput = (e) =>{
     updateSlider(e.target.value);
+
+    if(activepage == "overview"){
+      user_values[6] = e.target.value;
+      console.log(user_values);
+    }else{
     let pageno = activepage.slice(-1);
     user_values[pageno] = e.target.value;
     console.log(user_values);
+    }
     //updateSlider(50) // Init value
   }
 }
@@ -181,17 +190,52 @@ for(let i=0; i<document.querySelectorAll(".slider").length;i++){
 
 //this is a requirement of the current slider styling
 const updateSlider = (value) => {
-  //console.log(activepage);
+  console.log(activepage);
+  let thumb;
+  let track;
+  if(activepage == "overview"){
+    thumb = document.querySelectorAll('.thumb')[document.querySelectorAll('.thumb').length-1];
+    track = document.querySelectorAll('.track-inner')[document.querySelectorAll('.track-inner').length-1];  
+  }else{
   let pageno = activepage.slice(-1);
   pageno = parseInt(pageno)-1;
-  let thumb = document.querySelectorAll('.thumb')[pageno];
-  let track = document.querySelectorAll('.track-inner')[pageno];
+  thumb = document.querySelectorAll('.thumb')[pageno];
+  track = document.querySelectorAll('.track-inner')[pageno];
+  }
   thumb.style.left = `${value}%`;
   thumb.style.transform = `translate(-${value}%, -50%)`;
   track.style.width = `${value}%`;
   
 }
 
+//*******Color Picker**********
+//I'm using an external API to build a prettier color picker
+
+function initColorPicker(){
+var colorPicker = new iro.ColorPicker("#picker", {
+  width:150,
+  height:150,
+  layout: [
+    {
+      component: iro.ui.Wheel
+    },
+    {
+      component: iro.ui.Slider,
+      options: {
+        sliderType: "value"
+      }
+    },
+  ]
+});
+
+colorPicker.on('color:change', function(color) {
+  // log the current color as a HEX string
+  
+  document.getElementById("picker").style.backgroundColor = color.hexString;
+  user_values[4] = color.hexString;
+  console.log(user_values);
+});
+}
 
 
 //*******API CaLLS**********
@@ -258,4 +302,67 @@ function add_date(id, user_data){
       console.log("Data: " + JSON.stringify(data));
     });
       });
+}
+
+
+//*******Populate PAM Images**********
+//using the images from the PAM project
+//populate the div #pam with 16 images
+const img_folders = ["1_afraid", "2_tense", "3_excited", "4_delighted", "5_frustrated", "6_angry", "7_happy", "8_glad", "9_miserable", "10_sad", "11_calm", "12_satisfied", "13_gloomy", "14_tired", "15_sleepy", "16_serene"];
+
+
+function populatePAM(){
+  console.log("populating PAM");
+  for(i=0; i<img_folders.length; i++){
+  let img_number = Math.floor(Math.random()*3);
+  img_number +=1;
+  let folder_number = i+1;
+  document.getElementById("pam").innerHTML += "<img src='pam_images/" + img_folders[i] + "/" + folder_number + "_" + img_number + ".jpg" + "' id='pam_" +folder_number + "'>";
+  console.log("pam_" + folder_number);
+  
+
+  }
+  for(i=1; i<=img_folders.length; i++){
+  document.getElementById("pam_" + i).addEventListener("click", pamClicked);
+  }
+}
+
+function pamClicked(e){
+  
+  //identify the number of the image clicked
+  let target = e.target.id.slice(-2);
+  if(target.slice(0,1) == "_"){
+    target = target.slice(-1);
+  }else{
+    target = target;
+  }
+
+  //identify whether the clicked image has negative or positive valence
+  let lowvalence1 = ["1","5","9","13"];
+  let lowvalence2 = ["2", "6", "10", "14"];
+  if(lowvalence1.indexOf(target) != -1){
+    console.log("negative valence 1");
+  }else if(lowvalence2.indexOf(target) != -1){
+    console.log("negative valence 2");
+  }else{
+    console.log("negative valence");
+  }
+
+  //identify whether the clicked image has low or high arousal
+  let lowarousal1 = ["13","14","15","16"];
+  let lowarousal2 = ["9","10","11","12"]
+  if(lowarousal1.indexOf(target) != -1){
+    console.log("low arousal 1");
+  }else if(lowarousal2.indexOf(target) != -1){
+    console.log("low arousal 2");
+  }else{
+    console.log("high arousal");
+  }
+  console.log("pam clicked " + target);
+  for(i=1; i<=img_folders.length; i++){
+    document.getElementById("pam_" + i).classList.remove("selected_pam");
+    }
+  document.getElementById(e.target.id).classList.add("selected_pam");
+    user_values[5] = target;
+    console.log(user_values);
 }
