@@ -1,3 +1,8 @@
+//to do: add email option for water garden
+//make cancel buttons work for all pages
+//add data recording feature?
+
+
 //id of acive page (page being displayed)
 let activepage = "landing";
 
