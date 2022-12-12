@@ -3,15 +3,35 @@
 //change which page is displayed
 function swapPage(oldPage, newPage){
 activepage = newPage;
-if(activepage == "landing"){
-  user_id = "";
+if(newPage == "landing"){
+  user_id = undefined;
   user_data = undefined;
-  scanRFID();
+  document.getElementById("picker").style.backgroundColor = "white";
+  resetPam();
   active_user = {};
   user_values = [];
 }
-document.getElementById(oldPage).style.display = "none";
-document.getElementById(newPage).style.display = "block";
+let pages_w_sliders = ["question1", "question2", "question3", "overview"]
+if(pages_w_sliders.indexOf(newPage) != -1 ){
+  console.log("new page has a slider");
+  updateSlider(0);
+}
+
+if(pages_w_sliders.indexOf(oldPage) != -1){
+  let pageno = oldPage.slice(-1);
+  if(user_values[pageno] == undefined){
+    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+  }
+}else if(oldPage == "question4" && user_values[4] == undefined){
+  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+}else if(oldPage == "question5" && user_values[5] == undefined){
+  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+}else{
+
+  document.getElementById(oldPage).style.display = "none";
+  document.getElementById(newPage).style.display = "block";
+}
+
 }
 
 
@@ -86,22 +106,29 @@ async function writeserial(message) {
 //*******RFID***********
 
 //rfid input
-let user_id = "";
+let user_id = undefined;
 
 function scanRFID(){
+  console.log("running scanRFID");
   document.addEventListener('keydown', function(event) {
     //each time a key is pressed, add it to the userID
     //end input on return key (13)
     if(document.getElementById("landing").style.display == "block"){
-      // console.log(event.keyCode);
 
-      if(event.keyCode == "13"){
+      if(event.key== "Enter"){
+        console.log(event.key);
         console.log("user id is: " + user_id);
+        if(user_id != undefined){
         const user_data = get_id(user_id);
         console.log("data: " + user_data);
-
+        }
+        user_id = undefined;
       }else{
+        if(user_id == undefined){
+          user_id = String.fromCharCode(event.keyCode)
+        }else{
       user_id += String.fromCharCode(event.keyCode);
+        }
     }
     }
   });
@@ -365,4 +392,10 @@ function pamClicked(e){
   document.getElementById(e.target.id).classList.add("selected_pam");
     user_values[5] = target;
     console.log(user_values);
+}
+
+function resetPam(){
+  for(i=1; i<=img_folders.length; i++){
+    document.getElementById("pam_" + i).classList.remove("selected_pam");
+    }
 }

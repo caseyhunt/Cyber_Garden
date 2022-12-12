@@ -1,10 +1,14 @@
 //to do: add email option for water garden
-//make cancel buttons work for all pages
 //add data recording feature?
-
+//test whether there the user has interacted with the sliders, prevent moving on without answer
+//add back buttons to assessment
+//reset selection of pam images for next user
 
 //id of acive page (page being displayed)
 let activepage = "landing";
+
+
+
 
 //start by displaying the landing page
 document.getElementById("landing").style.display = 'block';
@@ -13,6 +17,7 @@ document.getElementById("landing").style.display = 'block';
 
 let active_user = {};
 let user_values = [];
+scanRFID();
 
 initSliders();
 initColorPicker();
@@ -62,7 +67,6 @@ document.getElementById("continue_to_user").addEventListener("touchstart", submi
 document.getElementById("cancel_registration").addEventListener("click", function(){swapPage("user_reg", "landing")});
 document.getElementById("cancel_registration").addEventListener("touchstart", function(){swapPage("user_reg", "landing")});
 
-//document.getElementById("cancel").addEventListener("click", function(){swapPage(activepage, "user")});
 
 document.getElementById("to_question5").addEventListener("click", function(){swapPage("question4", "question5")});
 
@@ -75,12 +79,11 @@ document.getElementById("to_record_result").addEventListener("click", function()
 document.getElementById("complete").addEventListener("click", function(){swapPage("recorded_result", "landing")});
 
 
+//cancel buttons
+for(i=0; i<document.querySelectorAll(".cancel").length; i++){
+    document.querySelectorAll(".cancel")[i].addEventListener("click", function(){swapPage(activepage, "user")});
 
-
-
-
-if(activepage == "landing"){
-scanRFID();
-active_user = {};
-user_values = [];
 }
+
+
+
