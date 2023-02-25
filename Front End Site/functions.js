@@ -1,8 +1,29 @@
-//to do: add date recording for "days since", add animation for sensor, finish data input process, add watering process
+
 
 //change which page is displayed
 function swapPage(oldPage, newPage){
-activepage = newPage;
+  let pages_w_sliders = ["question1", "question2", "question3"]
+let pageno = oldPage.slice(-1);
+
+if(newPage== "user"){
+    document.getElementById(oldPage).style.display = "none";
+    document.getElementById(newPage).style.display = "block";
+    activepage = newPage;
+}else if(pages_w_sliders.indexOf(oldPage) != -1 && user_values[pageno] == undefined ){
+    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+}else if(oldPage == "question4" && user_values[4] == undefined){
+  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+}else if(oldPage == "question5" && user_values[5] == undefined){
+  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+}else if(oldPage == "overview" && user_values[6] == undefined){
+  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+
+}else{
+  document.getElementById(oldPage).style.display = "none";
+  document.getElementById(newPage).style.display = "block";
+  activepage = newPage;
+}
+
 if(newPage == "landing"){
   user_id = undefined;
   user_data = undefined;
@@ -11,27 +32,66 @@ if(newPage == "landing"){
   active_user = {};
   user_values = [];
 }
-let pages_w_sliders = ["question1", "question2", "question3", "overview"]
+
+if(activepage == "overview"){
+  let composite_stress = compositeStress();
+  updateSlider(composite_stress);
+ 
+}
+
+if(newPage == "recorded_result"){
+  console.log("result! " + user_values[6]);
+  document.getElementById("percent_stress").innerHTML = user_values[6];
+  console.log(hexToRGB(user_values[4]));
+  let fcolor = hexToRGB(user_values[4]);
+  let fopen = String(user_values[6]);
+  let flower = String(Math.floor(Math.random()*8));
+  flower = String(0);
+  let flowercolor = "[" + flower + "," + String(fcolor[0]) + "," + String(fcolor[1]) + "," + String(fcolor[2]) + "]";
+  let flowermotor = "[" + flower + "," + fopen + "]";
+  var enc = new TextEncoder(); // always utf-8
+    // let data = enc.encode(flowercolor);
+    // // const data = "<1>";
+    // // const data = "<1>";
+    //   writeserial(data).then(writer =>{
+    //     console.log("releasing lock");
+    //     writer.releaseLock();
+    //   });
+
+    data = enc.encode(flowermotor);
+    console.log(flowermotor);
+    writeserial(data).then(writer =>{
+      console.log("releasing lock");
+      writer.releaseLock();
+    });
+
+  setTimeout(function(){
+    data = enc.encode(flowermotor);
+    console.log(flowermotor);
+    writeserial(data).then(writer =>{
+      console.log("releasing lock");
+      writer.releaseLock();
+    });
+},100);
+}
+
 if(pages_w_sliders.indexOf(newPage) != -1 ){
   console.log("new page has a slider");
   updateSlider(0);
+  // document.getElementById(oldPage).style.display = "none";
+  // document.getElementById(newPage).style.display = "block";
 }
 
-if(pages_w_sliders.indexOf(oldPage) != -1){
-  let pageno = oldPage.slice(-1);
-  if(user_values[pageno] == undefined){
-    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-  }
-}else if(oldPage == "question4" && user_values[4] == undefined){
-  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-}else if(oldPage == "question5" && user_values[5] == undefined){
-  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-}else{
 
-  document.getElementById(oldPage).style.display = "none";
-  document.getElementById(newPage).style.display = "block";
+
 }
 
+function hexToRGB(h){
+  const r = parseInt(h.slice(1,3), 16);
+  const g = parseInt(h.slice(3,5), 16);
+  const b = parseInt(h.slice(5,7), 16);
+
+  return [r,g,b];
 }
 
 
@@ -53,7 +113,7 @@ async function openPort(){
   console.log("serial menu opening");
   port = await navigator.serial.requestPort();
   // Wait for the serial port to open.
-  await port.open({ baudRate: 115200 });
+  await port.open({ baudRate: 9600 });
   console.log(port);
 
   while (port.readable) {
@@ -73,7 +133,7 @@ async function openPort(){
           break;
         }
         // Do something with |value|…
-        console.log(value);
+        console.log("serial reading:" + value);
         console.log(String(value).slice(0, 5) == "start");
         if(String(value).slice(0, 5) == "start" && document.getElementById("r_data").style.display == "block"){
           console.log("switching page");
@@ -102,6 +162,7 @@ async function writeserial(message) {
   return writer;
 }
 }
+
 
 //*******RFID***********
 
@@ -398,4 +459,41 @@ function resetPam(){
   for(i=1; i<=img_folders.length; i++){
     document.getElementById("pam_" + i).classList.remove("selected_pam");
     }
+}
+
+//*******Calculate Composite Stress**********
+//Compile all answers to the stress assessment and calculate a composite stress score
+//Weight the first two questions (how stressed are you?) with 80% weight (40% per question)
+//Weight the PAM assessment and the energy question with 20% weight (10% per question)
+
+//pam valence to stress by column
+//100, 75, 0, 0
+
+function compositeStress(){
+  let stressed_q = parseFloat(user_values[1]) + parseFloat(user_values[2]);
+  let ambiguous_q;
+  let total_stress;
+  let lowvalence1 = ["1","5","9","13"];
+  let lowvalence2 = ["2", "6", "10", "14"];
+  if(lowvalence1.indexOf(user_values[5]) != "-1"){
+    ambiguous_q = 100;
+  }else if(lowvalence2.indexOf(user_values[5]) != "-1"){
+    ambiguous_q = 75;
+  }else{
+    ambiguous_q = 0;
+  }
+  console.log("ambiguous value = " + ambiguous_q);
+
+  let energy_level = 100- parseFloat(user_values[3]);
+
+  console.log("energy value = " + energy_level);
+  ambiguous_q += energy_level;
+
+  console.log("a value = " + ambiguous_q);
+  console.log(stressed_q);
+  total_stress = (ambiguous_q * .2) + (stressed_q * .8);
+  let potential_stress = (200*.2) + (200*.8);
+  total_stress = (total_stress/potential_stress)*100;
+  return total_stress;
+  
 }

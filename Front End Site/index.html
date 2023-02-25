@@ -74,9 +74,12 @@
   <div id="r_inprogress">
     <h1>Please keep hand on the sensor</h1>
     <h3 id="inprogress">Reading in Progress</h3>
-    <div id="sensorillustration" class="center"></div>
+    <div class="container">
+      <div class="heart"></div>
+  </div>
     <div class="buttons">
       <button class="cancel">Cancel</button>
+      <button id="test">Test</button>
     </div>
   </div>
 
@@ -129,6 +132,7 @@
   </div>
 
   <div id="question3">
+    <!-- low energy = stress effect -->
     <h1>What is your energy level?</h1>
     <div class="wrap center">
     <input type="range" min="1" max="100" value="50" class="slider" id="energy">
@@ -155,6 +159,7 @@
   </div>
 
   <div id="question5">
+    <!-- low affect = stress effect -->
     <h1>Select the image that best represents your mood</h1>
     <div id="pam">
     
@@ -199,7 +204,7 @@
 
     <!-- <h2>The default value is a representation of your combined assessment and biological stress.</h2> -->
     <p>
-      Composite Stress Reported: <span>70% Stressed</span>
+      Composite Stress Reported: <span id="percent_stress">70</span>% Stressed
     </p>
       <div class="buttons">
         <button id="complete">Continue</button>

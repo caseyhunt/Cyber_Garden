@@ -258,3 +258,60 @@ input{
   width:18% !important;
   text-align: left;
 }
+
+/* heart animation */
+/* adapted from Lena Stanley */
+/* https://codepen.io/lenasta92579651/pen/qBazNxx */
+.container {
+  position: relative;
+  animation: 1.5s beat infinite;
+
+}
+    
+.heart {
+  position: relative;
+  margin-top:25px;
+  background-color: red;
+  display: inline-block;
+  height: 60px;
+  top:0;
+  left:0;
+  transform: rotate(-45deg);
+  width:60px;
+}
+  
+.heart:before, .heart:after {
+  content:"";
+  background-color: red;
+  border-radius:50%;
+  height: 60px;
+  width: 60px;
+  position: absolute;
+  width: 60px;
+  }
+  
+.heart:before {
+  top:-30px;
+  left:0;}
+  
+.heart:after {
+  left:30px;
+  top:0;}
+  
+@keyframes beat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  40% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

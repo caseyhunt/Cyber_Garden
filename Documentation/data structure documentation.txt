@@ -1,0 +1,64 @@
+//access current users using "active flowers" call. (I'll set it up :0 )
+//This is also currently not built.
+//Call returns:
+
+//flower number, does this seem like the best option??
+//we have flowers 0 to 7. I will always return in order.
+
+"0": {
+	"email": "hello@there.com",
+	"stress_data": {
+
+      //this is the composite reported. We take the average of each question and then average that with the biometric data. 
+      //We report the the biometric data as low/med/high (33, 67, 100) based on a bell curve.
+      "composite": "98",
+
+      //this will give you the data of each question plus heart rate variability. Let me know if you want the content of the questions!
+	//answers will be scaled 1-100 except raw HR variability. I want to do a quick pilot study to collect a range of values once Ruo is sets me up with HRV.
+	//Some q's are weird. Question 4 asks about energy level, we see it as better to be "higher" energy.
+	//Question 5 is the emotion map, we turn the values into a number from 1-100. We talked about this at length actually. I'd be happy to talk you through our choices :)
+      "detail": ["HRV composite (33,67,100)", "HRV Raw", "question1", "question2", "question3", "question4", "question5", "RGB"]
+    }
+},
+
+"1":{
+...
+},
+"2":{
+...
+}
+
+
+
+
+
+//this is documentation for the users.json file.
+
+//user info
+
+// keys are accessed by the RFID card number.
+  "D315E53E": {
+    "name": [
+      "Casey",
+      "Hunt"
+    ],
+    "email": "casey.hunt@colorado.edu",
+    "degree": "dr", //I just included this to keep track of participant's degree. They fill this in during onboarding
+    "last_login": "Mon Nov 14 2022 19:21:11 GMT-0700 (Mountain Standard Time)",
+
+    //this is what the stress data will look like
+    //I haven't built this part of the API yet so please speak up on data structure changes!
+
+    "stress_data": {
+      //this is the composite reported. We take the average of each question and then average that with the biometric data. 
+      //We report the the biometric data as low/med/high (33, 67, 100) based on a bell curve.
+
+      "composite": "98",
+      //this will give you the data of each question plus heart rate variability. Let me know if you want the content of the questions!
+	//answers will be scaled 1-100 except raw HR variability. I want to do a quick pilot study to collect a range of values once Ruo is sets me up with HRV.
+	//Some q's are weird. Question 4 asks about energy level, we see it as better to be "higher" energy.
+	//Question 5 is the emotion map, we turn the values into a number from 1-100. We talked about this at length actually. I'd be happy to talk you through our choices :)
+
+      "detail": ["HRV composite (33,67,100)", "HRV Raw", "question1", "question2", "question3", "question4", "question5", "RGB"]
+    }
+  },

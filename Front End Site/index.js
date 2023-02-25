@@ -3,9 +3,16 @@
 //test whether there the user has interacted with the sliders, prevent moving on without answer
 //add back buttons to assessment
 //reset selection of pam images for next user
+//add low/high on sliders
+//the server is not registering a new login time for some reason
+
+//add data recording for most recent interactions with garden (for garden health and watering)
+
+
 
 //id of acive page (page being displayed)
 let activepage = "landing";
+
 
 
 
@@ -78,6 +85,7 @@ document.getElementById("to_record_result").addEventListener("click", function()
 
 document.getElementById("complete").addEventListener("click", function(){swapPage("recorded_result", "landing")});
 
+document.getElementById("test").addEventListener("click", function(){swapPage("r_inprogress", "r_complete")});
 
 //cancel buttons
 for(i=0; i<document.querySelectorAll(".cancel").length; i++){
