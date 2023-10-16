@@ -184,7 +184,7 @@ progress[value]::-webkit-progress-value{
 /* start assessment page styling */
 
 #start_assessment{
-  display:none;
+  display:block;
 }
 
 /* question 1 styling */

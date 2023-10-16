@@ -24,19 +24,20 @@ if(newPage== "user"){
   activepage = newPage;
 }
 
-if(newPage == "landing"){
-  user_id = undefined;
-  user_data = undefined;
-  document.getElementById("picker").style.backgroundColor = "white";
-  resetPam();
-  active_user = {};
-  user_values = [];
-}
+
+
+// if(newPage == "landing"){
+//   user_id = undefined;
+//   user_data = undefined;
+//   document.getElementById("picker").style.backgroundColor = "white";
+//   resetPam();
+//   active_user = {};
+//   user_values = [];
+// }
 
 if(activepage == "overview"){
   let composite_stress = compositeStress();
   updateSlider(composite_stress);
- 
 }
 
 if(newPage == "recorded_result"){
@@ -85,6 +86,8 @@ if(pages_w_sliders.indexOf(newPage) != -1 ){
 
 
 }
+
+swapPage('landing', 'start_assessment');
 
 function hexToRGB(h){
   const r = parseInt(h.slice(1,3), 16);

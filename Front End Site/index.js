@@ -11,14 +11,14 @@
 
 
 //id of acive page (page being displayed)
-let activepage = "landing";
+let activepage = "start_assessment";
 
 
 
 
 
 //start by displaying the landing page
-document.getElementById("landing").style.display = 'block';
+document.getElementById(activepage).style.display = 'block';
 
 
 
