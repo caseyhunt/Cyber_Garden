@@ -10,28 +10,41 @@
 
   <!-- color picker library -->
   <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+
+  <!-- chart library for line chart -->
+  <script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
 </head>
 
 <body>
+  <!-- landing page -->
   <div id="landing">
-    <label for="garden">Garden Health</label><progress id="garden" value="80" max="100"></progress>
-    <div id="garden_vis" class="center"></div>
-    <h3>Tap BuffOne Card to Interact with the Garden</h3>
+    <!-- <label for="garden">Garden Health</label><progress id="garden" value="80" max="100"></progress> -->
+    <h1>Welcome to Cyber Garden</h1>
+    <div id="garden_vis" class="center"><img src="images/garden.png" alt="illustration of the garden interface" id = "garden_img" /> </div>
+    <h3>Tap BuffOne Card to Get Started</h3>
+    <h3>or</h3>
+    <button id="anon">Continue Anonymously</button>
+  </br>
     <button id="open_port">Open Serial Port</button>
   </div>
 
+  <!-- welcome page for logged in user -->
   <div id="user">
-    <h1>Welcome <span id="uname">Back Name</span>!
+    <h1>Welcome <span id="uname">Back Name</span>!</h1>
+      <div id="graph_link"><img src="images/graph_icon.png"><h4>Stress History</h4></div>
     <h3 id="itsbeen"></h3>
     <div id="options">
     <div id="water" class="options"><h1>Water<br/>Garden</h1></div>
-    <div id="record" class="options"><h1>Record<br/>Data</h1></div>
+    <div id="record" class="options"><h1>Complete<br/>Stress Assessment</h1></div>
     </div>
     <div class="buttons">
       <button id="log_out">Log Out</button>
     </div>
   </div>
 
+<!-- user registration for new users -->
   <div id="user_reg">
     <h1>Welcome to CyberGarden!</h1>
     <h3>Please enter your information below to register to use the display</h3>
@@ -44,13 +57,26 @@
       <label for="email" class="inline_input">Email:</label>
       <input type="text" id="email" name="email"><br>
     </div>
-      <label for="degree">What degree are you seeking at CU?</label><br>
+    <br>
+      <label for="degree"><b>What is your role at CU?</b></label><br>
       <input type="radio" id="bachelor" name="degree" value="b">
-      <label for="bachelor">Bachelor's</label>
+      <label for="bachelor">Undergraduate Student</label>
       <input type="radio" id="master" name="degree" value="m">
-      <label for="master">Master's</label>
+      <label for="master">Master's Student</label>
       <input type="radio" id="doctor" name="degree" value="dr">
-      <label for="master">PhD</label>
+      <label for="phd">PhD Student/Candidate</label>
+      <br>
+      <input type="radio" id="faculty" name="degree" value="faculty">
+      <label for="faculty">Faculty</label>
+      <input type="radio" id="other" name="degree" value="other">
+      <label for="other">Other/Prefer Not to Say</label>
+      <br>
+      <br>
+      <label for="contacted"><b>Can we contact you to follow up about our research?</b></label><br>
+      <input type="radio" id="yes" name="contacted" value="y">
+      <label for="yes">Yes</label>
+      <input type="radio" id="no" name="contacted" value="n">
+      <label for="master">No</label>
     </form>
     <div class="buttons">
       <button id="cancel_registration">Cancel</button>
@@ -58,10 +84,31 @@
     </div>
   </div>
 
-  <div id="w_garden">
-    Water Garden
+  <!-- graph page -->
+
+  <div id="graph">
+
+    <h1>Select an option to water the garden.</h1>
+    <canvas id="lineChart" style="width:50%;max-width:600px"></canvas>
+
   </div>
 
+
+  <!-- water garden page (bubbles and breathing) -->
+  <div id="w_garden">
+
+    <h1>Select an option to water the garden.</h1>
+      <div id="options">
+      <div id="breathe" class="options"><h1>Mindful<br/>Breathing</h1></div>
+      <div id="bubble" class="options"><h1>Pop <br/> Bubbles</h1></div>
+      </div>
+      <div class="buttons">
+        <button id="log_out_1">Log Out</button>
+      </div>
+
+  </div>
+
+  <!-- record data (not currently showing) -->
   <div id="r_data">
     <h1>Place your hand on the sensor</h1>
     <div id="sensorillustration" class="center"></div>
@@ -92,15 +139,21 @@
     </div>
   </div>
 
+
+<!-- start assessment (not currently showing) -->
   <div id="start_assessment">
     <h1>Please complete a stress assessment</h1>
-    <div id="stress_assessment" class="center"></div>
+    <div id="stress_assessment" class="center">
+      <img src="Priyanka Assets/stressmeter.gif" alt="description of gif" id = "stress_assessment" /> 
+    </div>
+
     <div class="buttons">
       <button class="cancel">Cancel</button>
       <button id="to_question1">Continue</button>
     </div>
   </div>
 
+  <!-- stress assessment start -->
   <div id="question1">
     <h1>How stressed have you felt over the last 24 hours?</h1>
     <div class="wrap center">
@@ -110,6 +163,8 @@
     </div>
     <div class="thumb"></div>
     </div>
+    <h3 class="low">low<br>stress</h3>
+    <h3 class="high">high<br>stress</h3>
     <div class="buttons">
       <button class="cancel">Cancel</button>
       <button id="to_question2">Continue</button>
@@ -125,6 +180,8 @@
     </div>
     <div class="thumb"></div>
     </div>
+    <h3 class="low">low<br>stress</h3>
+    <h3 class="high">high<br>stress</h3>
     <div class="buttons">
       <button class="cancel">Cancel</button>
       <button id="to_question3">Continue</button>
@@ -141,6 +198,8 @@
     </div>
     <div class="thumb"></div>
     </div>
+    <h3 class="low">low<br>energy</h3>
+    <h3 class="high">high<br>energy</h3>
     <div class="buttons">
       <button class="cancel">Cancel</button>
       <button id="to_question4">Continue</button>
@@ -148,7 +207,7 @@
   </div>
 
   <div id="question4">
-    <h1>Pick a color that represents your mood</h1>
+    <h1>Pick a color that represents you or your mood</h1>
     <!-- <input type="color" value="#ff0000" id="colorpicker"> -->
 
     <div id="picker"></div>
@@ -179,8 +238,9 @@
       </div>
   </div>
 
+
   <div id="overview">
-    <h1>This is a composite of your biological and self-reported stress.</h1>
+    <h1>This is a composite of your self-reported stress.</h1>
 
     <h2>Adjust the slider to match how stressed you actually feel</h2>
 
@@ -210,6 +270,7 @@
         <button id="complete">Continue</button>
       </div>
   </div>
+  <!-- stress assessment end -->
 
   <script src="functions.js" type="text/javascript"></script>
   <script src="index.js" ></script>

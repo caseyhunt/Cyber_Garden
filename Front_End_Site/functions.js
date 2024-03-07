@@ -1,14 +1,21 @@
-
+let composite_stress;
 
 //change which page is displayed
 function swapPage(oldPage, newPage){
   let pages_w_sliders = ["question1", "question2", "question3"]
 let pageno = oldPage.slice(-1);
 
+composite_stress = compositeStress();
+
+//if going to the logged in user page (water garden/take assessment)
+//then re-populate the line graph
+//and clear the user values
 if(newPage== "user"){
     document.getElementById(oldPage).style.display = "none";
     document.getElementById(newPage).style.display = "block";
     activepage = newPage;
+    get_users();
+    user_values = [];
 }else if(pages_w_sliders.indexOf(oldPage) != -1 && user_values[pageno] == undefined ){
     alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
 }else if(oldPage == "question4" && user_values[4] == undefined){
@@ -16,15 +23,18 @@ if(newPage== "user"){
 }else if(oldPage == "question5" && user_values[5] == undefined){
   alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
 }else if(oldPage == "overview" && user_values[6] == undefined){
-  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-
+  //alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+  user_values[6] = composite_stress;
 }else{
   document.getElementById(oldPage).style.display = "none";
   document.getElementById(newPage).style.display = "block";
   activepage = newPage;
 }
 
+if(activepage == "overview"){
 
+  updateSlider(Number(composite_stress));
+}
 
 // if(newPage == "landing"){
 //   user_id = undefined;
@@ -35,21 +45,38 @@ if(newPage== "user"){
 //   user_values = [];
 // }
 
-if(activepage == "overview"){
-  let composite_stress = compositeStress();
-  updateSlider(composite_stress);
+
+
+if(pages_w_sliders.indexOf(newPage) != -1 ){
+  console.log("new page has a slider");
+  updateSlider(0);
+  // document.getElementById(oldPage).style.display = "none";
+  // document.getElementById(newPage).style.display = "block";
 }
 
-if(newPage == "recorded_result"){
+
+
+}
+
+let flowercounter = 0;
+function dataToArduino(){
+  swapPage("overview", "recorded_result");
   console.log("result! " + user_values[6]);
   document.getElementById("percent_stress").innerHTML = user_values[6];
+  let current_data = {'last_login': d, 'percent_stress': user_values[6], 'color': user_values[4]};
+  add_date(current_user, current_data);
   console.log(hexToRGB(user_values[4]));
   let fcolor = hexToRGB(user_values[4]);
-  let fopen = String(user_values[6]);
-  let flower = String(Math.floor(Math.random()*8));
-  flower = String(0);
-  let flowercolor = "[" + flower + "," + String(fcolor[0]) + "," + String(fcolor[1]) + "," + String(fcolor[2]) + "]";
-  let flowermotor = "[" + flower + "," + fopen + "]";
+  let fopen = String(Math.round(100-user_values[6]));
+
+  flower = String(flowercounter);
+  if(flowercounter<8){
+    flowercounter +=1;
+  }else{
+    flowercounter=0;
+  }
+  let flowercolor = "[" + 1 + "," + flower + "," + String(fcolor[0]) + "," + String(fcolor[1]) + "," + String(fcolor[2]) + "]";
+  let flowermotor = "[" + 0 + "," + flower + "," + fopen + "]";
   var enc = new TextEncoder(); // always utf-8
     // let data = enc.encode(flowercolor);
     // // const data = "<1>";
@@ -67,27 +94,34 @@ if(newPage == "recorded_result"){
     });
 
   setTimeout(function(){
-    data = enc.encode(flowermotor);
-    console.log(flowermotor);
+    data = enc.encode(flowercolor);
+    console.log(flowercolor);
     writeserial(data).then(writer =>{
       console.log("releasing lock");
       writer.releaseLock();
     });
-},100);
+},1500);
+
+// setTimeout(function(){
+//   data = enc.encode(flowercolor);
+//   console.log(flowercolor);
+//   writeserial(data).then(writer =>{
+//     console.log("releasing lock");
+//     writer.releaseLock();
+//   });
+// },1000);
+
+// setTimeout(function(){
+//   data = enc.encode(flowermotor);
+//   console.log(flowermotor);
+//   writeserial(data).then(writer =>{
+//     console.log("releasing lock");
+//     writer.releaseLock();
+//   });
+// },1000);
 }
 
-if(pages_w_sliders.indexOf(newPage) != -1 ){
-  console.log("new page has a slider");
-  updateSlider(0);
-  // document.getElementById(oldPage).style.display = "none";
-  // document.getElementById(newPage).style.display = "block";
-}
 
-
-
-}
-
-swapPage('landing', 'start_assessment');
 
 function hexToRGB(h){
   const r = parseInt(h.slice(1,3), 16);
@@ -170,15 +204,17 @@ async function writeserial(message) {
 //*******RFID***********
 
 //rfid input
+//written for user ids
 let user_id = undefined;
-
+let current_user;
 function scanRFID(){
   console.log("running scanRFID");
   document.addEventListener('keydown', function(event) {
     //each time a key is pressed, add it to the userID
     //end input on return key (13)
     if(document.getElementById("landing").style.display == "block"){
-
+      composite_stress = "";
+      get_users();
       if(event.key== "Enter"){
         console.log(event.key);
         console.log("user id is: " + user_id);
@@ -186,6 +222,7 @@ function scanRFID(){
         const user_data = get_id(user_id);
         console.log("data: " + user_data);
         }
+        current_user = user_id
         user_id = undefined;
       }else{
         if(user_id == undefined){
@@ -196,6 +233,51 @@ function scanRFID(){
     }
     }
   });
+}
+
+//written for anonymous rfid
+// function scanRFID(){
+//   console.log("running scanRFID");
+//   document.addEventListener('keydown', function(event) {
+//     //each time a key is pressed, add it to the userID
+//     //end input on return key (13)
+//     if(document.getElementById("landing").style.display == "block"){
+//       composite_stress = "";
+//       get_users();
+//       if(event.key== "Enter"){
+//         console.log(event.key);
+//         console.log("user id is: " + user_id);
+//         current_user = user_id
+//         user_id = undefined;
+//         swapPage("landing", "user");
+//       }else{
+//         if(user_id == undefined){
+//           user_id = String.fromCharCode(event.keyCode)
+//         }else{
+//       user_id += String.fromCharCode(event.keyCode);
+//         }
+//     }
+//     }
+//   });
+// }
+
+function anonymousUser(){
+  user_id = "anonymous";
+  current_user = user_id;
+  populateUserPage("", d, true);
+  swapPage("landing", "user");
+}
+
+function logout(){
+  user_id = undefined;
+  current_user = undefined;
+  swapPage("user", "landing");
+}
+
+function logout1(){
+  user_id = undefined;
+  current_user = undefined;
+  swapPage("w_garden", "landing");
 }
 
 //******SUBMIT USER REGISTRATION********
@@ -209,8 +291,11 @@ function verifyRegForm(){
   const email = document.getElementById('email').value;
   var radioButtonGroup = document.getElementsByName("degree");
   var checkedRadio = Array.from(radioButtonGroup).find((radio) => radio.checked);
+  var radioButtonGroup_1 = document.getElementsByName("contacted");
+  var checkedRadio_1 = Array.from(radioButtonGroup_1).find((radio) => radio.checked);
+
   const isemail = isEmail(email);
-  let user_data = {"name": [fname, lname], "email": email, "degree": checkedRadio.value, "last_login": d};
+  let user_data = {"name": [fname, lname], "email": email, "degree": checkedRadio.value, "contact": checkedRadio_1.value, "last_login": d, "stress":["0"]};
   if("string" == typeof fname && "string" == typeof lname && isemail){
     console.log("form completed " + fname + " " + lname);
     populateUserPage(fname, d, true);
@@ -239,7 +324,6 @@ function populateUserPage(name, date, first_visit){
     let days = new Date(date);
     days = daysSince(days).toString();
     console.log('days since ' + daysSince(days));
-    add_date(user_id, {"last_login": d});
     document.getElementById("uname").innerHTML = "Back "+ name;
     //to-do: add math for weeks/months?
     document.getElementById("itsbeen").innerHTML = "It's been " + days + " days since we last saw you.";
@@ -247,7 +331,7 @@ function populateUserPage(name, date, first_visit){
   }else{
 
     document.getElementById("uname").innerHTML = name;
-    document.getElementById('itsbeen').innerHTML = "This is your first visit! Click here for a tutorial and information about the project.";
+    document.getElementById('itsbeen').innerHTML = "This is your first visit! Thank you for trying our project.";
   }
 }
 
@@ -267,7 +351,7 @@ for(let i=0; i<document.querySelectorAll(".slider").length;i++){
     updateSlider(e.target.value);
 
     if(activepage == "overview"){
-      user_values[6] = e.target.value;
+      user_values[6] = Math.round(e.target.value);
       console.log(user_values);
     }else{
     let pageno = activepage.slice(-1);
@@ -361,11 +445,12 @@ function get_id(id){
       });
 }
 
+//troubleshoot, somehow this is broken and the UID being sent is always undefined
 
 function create_user(id, user_data){
     $(document).ready(function () {
       let endpoint = "http://127.0.0.1:3001/users/";
-      let userID = id;
+      let userID = current_user;
       let data = user_data;
             $.ajax({
                 type: "put",
@@ -373,7 +458,9 @@ function create_user(id, user_data){
                 url: endpoint + userID,
             }).done(
             function(data){
+             
         console.log("Data: " + JSON.stringify(data));
+       
       });
         });
       }
@@ -383,6 +470,7 @@ function add_date(id, user_data){
     let endpoint = "http://127.0.0.1:3001/users/";
     let userID = id;
     let data = user_data;
+    // data = {"percent_stress": 80}
     console.log(data);
           $.ajax({
               type: "post",
@@ -391,10 +479,28 @@ function add_date(id, user_data){
           }).done(
           function(data){
       console.log("Data: " + JSON.stringify(data));
+      
     });
       });
 }
 
+function get_users(){
+  $(document).ready(function () {
+    let endpoint = "http://127.0.0.1:3001/users";
+          $.ajax({
+              type: "get",
+              // data: data,
+              url: endpoint,
+          }).done(
+          function(data){
+      console.log("Data: " + JSON.stringify(data));
+
+     // document.getElementById("garden").value = data['stress'];
+    });
+      });
+    }
+
+  get_users();
 
 //*******Populate PAM Images**********
 //using the images from the PAM project
@@ -500,3 +606,23 @@ function compositeStress(){
   return total_stress;
   
 }
+
+// chart
+const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+const yValues = [55, 49, 44, 24, 15];
+const barColors = ["red", "green","blue","orange","brown"];
+
+const myChart = new Chart("lineChart", {
+    type: "line",
+    data: {
+        backgroundColor:"rgba(0,0,255,1.0)",
+
+        labels: xValues,
+        datasets: [{
+          data: yValues,
+          borderColor: "rgba(0,0,255,0.1)",
+          fill: false
+        }]
+      },
+    options: {}
+  });
