@@ -36,7 +36,7 @@ const userRoutes = (app, fs) => {
     };
 
     // READ
-    app.get('/garden', (req, res) => {
+    app.post('/garden', (req, res) => {
         fs.readFile(dataPath, 'utf8', (err, data) => {
             data = JSON.parse(data)
             //1. is the last average taken farther away in time from the oldest reading than the window size?
@@ -99,16 +99,20 @@ const userRoutes = (app, fs) => {
                     next_value = new Date(stress_queue[3]);
                     last_date = new Date(stress_queue[1]);
                     stress_queue = stress_queue.slice(2);
+                    // data['garden']['stress_queue'].slice(2);
                     avg_range = (next_value.getTime() - start_of_range.getTime()) / (1000 * 60 * 60 * 24);
                 }
 
                 avg = Math.round(avg/n);
-                stress.push(avg);
-                stress.push(last_date);
-
+                stress.push(avg.toString());
+                stress.push(last_date.toString());
+                // data['garden']['stress'].push(avg);
+                // data['garden']['stress'].push(last_date);
                 difference = (current_date.getTime() - last_date.getTime()) / (1000 * 60 * 60 * 24);
-             
+                data['garden']['stress_queue'] = stress_queue;
+                console.log("queue" + stress_queue);
             }
+
 
 
                 
@@ -116,8 +120,11 @@ const userRoutes = (app, fs) => {
             // if (err) {
             //     throw err;
             // }
+            writeFile(JSON.stringify(data, null, 2), () => {
+                res.status(200).send(data['garden']['stress']);
+            });
            
-            res.status(200).send(data['garden']['stress']);
+            
         });
     });
 

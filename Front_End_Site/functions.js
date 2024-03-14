@@ -229,6 +229,7 @@ function scanRFID(){
         const user_data = get_id(user_id);
         console.log("data: " + user_data);
         get_user_data(user_id);
+        
         }
         current_user = user_id
         user_id = undefined;
@@ -274,6 +275,7 @@ function anonymousUser(){
   current_user = user_id;
   populateUserPage("", d, true);
   swapPage("landing", "user");
+  generate_chart(true); //is anonymous
 }
 
 function logout(){
@@ -439,12 +441,14 @@ function get_id(id){
           function(data){
             console.log("data returned");
             console.log(data);
+            u_data = data;
             if(data.name === undefined){
               swapPage("landing", "user_reg");
             }else{
             const fname = data.name[0];
             const date = data.last_login;
             populateUserPage(fname, date, false);
+            generate_chart(false);//not anonymous
             swapPage("landing", "user");
             return data;
           }
@@ -496,7 +500,7 @@ function get_garden_data(){
   $(document).ready(function () {
     let endpoint = "http://127.0.0.1:3001/garden";
           $.ajax({
-              type: "get",
+              type: "post",
               // data: data,
               url: endpoint,
           }).done(
@@ -633,22 +637,115 @@ function compositeStress(){
   
 }
 
+let user_history = [];
+let user_history_dates = [];
+let garden_history = [];
+let garden_history_dates = [];
+
+function generate_chart(isanon){
+  user_history = [];
+  user_history_dates = [];
+  garden_history = [];
+  garden_history_dates = [];
+  if(isanon == true){
+
+
+  }else{
+    j = 0;
+    for(i=0; i<u_data["stress"].length; i++){
+      
+      console.log(u_data["stress"][i] != null);
+      if(i%3 == 1){
+        user_history[j]= {
+          x: 1,
+          y: Number(u_data["stress"][i])
+        
+        };
+
+        console.log("user stress 0: " + u_data["stress"][i])
+      }else if(i%3 ==2){
+          user_history[j]["x"] = new Date(u_data["stress"][i]);
+        j+=1;
+        console.log("user stress 1: " + u_data["stress"][i])
+        
+      }else if(i%3 == 0 && i>0){
+
+        
+
+      }
+    }
+
+  }
+  j = 0;
+  for(i=0; i<garden_data.length; i++){
+    if(i%2 == 0){
+      garden_history[j] = {
+        x: 1,
+        y: Number(garden_data[i])
+      };
+    }else if(i%2 ==1){
+      garden_history[j]["x"] = new Date(garden_data[i]);
+      j+=1;
+    }
+  }
+  const myChart = new Chart("lineChart", {
+    type: "line",
+    data: {
+        backgroundColor:"rgba(0,0,255,1.0)",
+
+        
+        datasets: [{label:"garden",
+        data: garden_history,
+        borderColor: "rgba(100,0,255,0.2)",
+        fill: false},
+        {
+          label: "user",
+          data: user_history,
+          borderColor: "rgba(0,0,255,0.1)",
+          fill: false
+        }
+          ]
+      },
+
+    options: {scales:{
+      x: {
+        type: 'time',
+        ticks: {
+          min: new Date('Jan 1 2024'),
+          max: new Date('May 1 2024')
+        }
+
+      },
+      y: {
+        ticks: {
+          min: 0
+        }
+      }
+      
+    }}
+  });
+}
+
+
+
 // chart
 const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
 const yValues = [55, 49, 44, 24, 15];
 const barColors = ["red", "green","blue","orange","brown"];
 
-const myChart = new Chart("lineChart", {
-    type: "line",
-    data: {
-        backgroundColor:"rgba(0,0,255,1.0)",
+// const config = {
+//   type: 'line',
+//   data,
+//   options: {
+//     scales:{
+//       x: {
+//         type: 'time',
+//         time: {
+//           unit: 'day'
+//         }
+//       }
+      
+//     }
+//   }
+// }
 
-        labels: xValues,
-        datasets: [{
-          data: yValues,
-          borderColor: "rgba(0,0,255,0.1)",
-          fill: false
-        }]
-      },
-    options: {}
-  });
