@@ -1,4 +1,6 @@
 let composite_stress;
+let u_data = [];
+let garden_data = [];
 
 //change which page is displayed
 function swapPage(oldPage, newPage){
@@ -14,7 +16,8 @@ if(newPage== "user"){
     document.getElementById(oldPage).style.display = "none";
     document.getElementById(newPage).style.display = "block";
     activepage = newPage;
-    get_users();
+    get_garden_data();
+
     user_values = [];
 }else if(pages_w_sliders.indexOf(oldPage) != -1 && user_values[pageno] == undefined ){
     alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
@@ -59,6 +62,7 @@ if(pages_w_sliders.indexOf(newPage) != -1 ){
 }
 
 let flowercounter = 0;
+let flowers = [0,0,0,0,0,0,0];
 function dataToArduino(){
   swapPage("overview", "recorded_result");
   console.log("result! " + user_values[6]);
@@ -75,8 +79,8 @@ function dataToArduino(){
   }else{
     flowercounter=0;
   }
-  let flowercolor = "[" + 1 + "," + flower + "," + String(fcolor[0]) + "," + String(fcolor[1]) + "," + String(fcolor[2]) + "]";
-  let flowermotor = "[" + 0 + "," + flower + "," + fopen + "]";
+  let flowercolor = "[" + 1 + "," + flowercounter + "," + String(fcolor[0]) + "," + String(fcolor[1]) + "," + String(fcolor[2]) + "]";
+  let flowermotor = "[" + 0 + "," + flowercounter + "," + fopen + "]";
   var enc = new TextEncoder(); // always utf-8
     // let data = enc.encode(flowercolor);
     // // const data = "<1>";
@@ -88,6 +92,7 @@ function dataToArduino(){
 
     data = enc.encode(flowermotor);
     console.log(flowermotor);
+    flowers[flowercounter] = fopen;
     writeserial(data).then(writer =>{
       console.log("releasing lock");
       writer.releaseLock();
@@ -214,13 +219,16 @@ function scanRFID(){
     //end input on return key (13)
     if(document.getElementById("landing").style.display == "block"){
       composite_stress = "";
-      get_users();
+      get_garden_data();
+      
       if(event.key== "Enter"){
         console.log(event.key);
         console.log("user id is: " + user_id);
+
         if(user_id != undefined){
         const user_data = get_id(user_id);
         console.log("data: " + user_data);
+        get_user_data(user_id);
         }
         current_user = user_id
         user_id = undefined;
@@ -484,9 +492,9 @@ function add_date(id, user_data){
       });
 }
 
-function get_users(){
+function get_garden_data(){
   $(document).ready(function () {
-    let endpoint = "http://127.0.0.1:3001/users";
+    let endpoint = "http://127.0.0.1:3001/garden";
           $.ajax({
               type: "get",
               // data: data,
@@ -494,13 +502,31 @@ function get_users(){
           }).done(
           function(data){
       console.log("Data: " + JSON.stringify(data));
-
+      garden_data = data;
      // document.getElementById("garden").value = data['stress'];
     });
       });
     }
 
-  get_users();
+  get_garden_data();
+
+  function get_user_data(id){
+    $(document).ready(function () {
+      let endpoint = "http://127.0.0.1:3001/data/";
+      let userID = id;
+      // data = {"percent_stress": 80}
+      console.log(data);
+            $.ajax({
+                type: "get",
+                url: endpoint + userID,
+            }).done(
+            function(data){
+        console.log("Data: " + JSON.stringify(data));
+        u_data = data;
+        
+      });
+        });
+  }
 
 //*******Populate PAM Images**********
 //using the images from the PAM project

@@ -1,9 +1,17 @@
 {
   "garden":{
     "stress": ["49.400000000000006",
-    "Tue Feb 27 2024 14:22:15 GMT-0700 (Mountain Standard Time)"],
-    "stress_queue": ["49.400000000000006",
-    "Tue Feb 27 2024 14:22:15 GMT-0700 (Mountain Standard Time)"]
+    "Jan 1 2024 14:22:15 GMT-0700 (Mountain Standard Time)"],
+    "stress_queue": [
+      "49.400000000000006",
+      "Feb 1 2024 14:22:15 GMT-0700 (Mountain Standard Time)",
+      "12",
+      "Feb 3 2024 14:22:15 GMT-0700 (Mountain Standard Time)",
+      "54",
+      "Feb 6 2024 14:16:05 GMT-0700 (Mountain Standard Time)",
+      "54",
+      "Feb 27 2024 14:16:05 GMT-0700 (Mountain Standard Time)"
+    ]
   },
   "041851FA0D5980": {
     "name": [
