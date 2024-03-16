@@ -85,7 +85,7 @@ const userRoutes = (app, fs) => {
 
                 if(Math.round(avg_range) > window_size){
                 n +=1;
-                avg += stress_queue[0];
+                avg += Number(stress_queue[0]);
                 last_date = new Date(stress_queue[1]);
                 stress_queue = stress_queue.slice(2);
                 console.log("in the if statement");
@@ -93,7 +93,7 @@ const userRoutes = (app, fs) => {
                 }
 
                 while(Math.round(avg_range) < window_size && avg_range != NaN){
-                    avg += stress_queue[0];
+                    avg += Number(stress_queue[0]);
                     console.log(stress_queue[0]);
                     n += 1;
                     next_value = new Date(stress_queue[3]);
@@ -102,8 +102,9 @@ const userRoutes = (app, fs) => {
                     // data['garden']['stress_queue'].slice(2);
                     avg_range = (next_value.getTime() - start_of_range.getTime()) / (1000 * 60 * 60 * 24);
                 }
-
+                console.log("avg:", avg, "n:", n);
                 avg = Math.round(avg/n);
+                console.log("average: ", avg);
                 stress.push(avg.toString());
                 stress.push(last_date.toString());
                 // data['garden']['stress'].push(avg);
