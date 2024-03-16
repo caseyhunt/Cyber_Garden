@@ -1,61 +1,93 @@
 let composite_stress;
 let u_data = [];
 let garden_data = [];
+let login_time = 0;
+let current_time = 0;
+let minutes_to_logout = 20;
 
 //change which page is displayed
 function swapPage(oldPage, newPage){
   let pages_w_sliders = ["question1", "question2", "question3"]
-let pageno = oldPage.slice(-1);
+  let pageno = oldPage.slice(-1);
 
-composite_stress = compositeStress();
+  composite_stress = compositeStress();
+
+  //check how long user has been logged in before swapping the pages
+  //if they have been logged in too long just engage the logout process instead of
+  //going to the next page.
+  current_time = new Date();
+  let time_difference = (current_time.getTime() - login_time.getTime())/(60*1000)
+  if(time_difference > minutes_to_logout){
+    alert("Sorry, you have been logged out due to inactivity");
+    document.getElementById(oldPage).style.display = "none";
+    document.getElementById("landing").style.display = "block";
+    resetPam();
+    user_id = undefined;
+    current_user = undefined;
+    chart.dispose();
+  }
 
 //if going to the logged in user page (water garden/take assessment)
 //then re-populate the line graph
 //and clear the user values
-if(newPage== "user"){
+  else if(newPage== "user"){
+      document.getElementById(oldPage).style.display = "none";
+      document.getElementById(newPage).style.display = "block";
+      activepage = newPage;
+
+      get_garden_data();
+
+      user_values = [];
+
+  }else if(pages_w_sliders.indexOf(oldPage) != -1 && user_values[pageno] == undefined ){
+      alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+  }else if(oldPage == "question4" && user_values[4] == undefined){
+    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+  }else if(oldPage == "question5" && user_values[5] == undefined){
+    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+  }else if(oldPage == "overview" && user_values[6] == undefined){
+    //alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+    user_values[6] = composite_stress;
+  }else{
     document.getElementById(oldPage).style.display = "none";
     document.getElementById(newPage).style.display = "block";
     activepage = newPage;
-    get_garden_data();
+  }
 
-    user_values = [];
-}else if(pages_w_sliders.indexOf(oldPage) != -1 && user_values[pageno] == undefined ){
-    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-}else if(oldPage == "question4" && user_values[4] == undefined){
-  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-}else if(oldPage == "question5" && user_values[5] == undefined){
-  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-}else if(oldPage == "overview" && user_values[6] == undefined){
-  //alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-  user_values[6] = composite_stress;
-}else{
-  document.getElementById(oldPage).style.display = "none";
-  document.getElementById(newPage).style.display = "block";
-  activepage = newPage;
-}
+  if(activepage == "overview"){
 
-if(activepage == "overview"){
+    updateSlider(Number(composite_stress));
 
-  updateSlider(Number(composite_stress));
-}
+  }
 
-// if(newPage == "landing"){
-//   user_id = undefined;
-//   user_data = undefined;
-//   document.getElementById("picker").style.backgroundColor = "white";
-//   resetPam();
-//   active_user = {};
-//   user_values = [];
-// }
+  if(activepage == "graph"){
+    chart.dispose();
+    if(current_user != undefined && current_user != "anonymous"){
+      get_id_no_swap(current_user);
+      generate_chart(false);
+    }else{
+      generate_chart(true);
+    }
+
+  }
+
+  // if(newPage == "landing"){
+  //   user_id = undefined;
+  //   user_data = undefined;
+  //   document.getElementById("picker").style.backgroundColor = "white";
+  //   resetPam();
+  //   active_user = {};
+  //   user_values = [];
+  // }
 
 
 
-if(pages_w_sliders.indexOf(newPage) != -1 ){
-  console.log("new page has a slider");
-  updateSlider(0);
-  // document.getElementById(oldPage).style.display = "none";
-  // document.getElementById(newPage).style.display = "block";
-}
+  if(pages_w_sliders.indexOf(newPage) != -1 ){
+    console.log("new page has a slider");
+    updateSlider(0);
+    // document.getElementById(oldPage).style.display = "none";
+    // document.getElementById(newPage).style.display = "block";
+  }
 
 
 
@@ -66,6 +98,7 @@ let flowers = [0,0,0,0,0,0,0];
 function dataToArduino(){
   swapPage("overview", "recorded_result");
   console.log("result! " + user_values[6]);
+  d = new Date();
   document.getElementById("percent_stress").innerHTML = user_values[6];
   let current_data = {'last_login': d, 'percent_stress': user_values[6], 'color': user_values[4]};
   add_date(current_user, current_data);
@@ -228,7 +261,9 @@ function scanRFID(){
         if(user_id != undefined){
         const user_data = get_id(user_id);
         console.log("data: " + user_data);
+        login_time = new Date();
         get_user_data(user_id);
+        
         
         }
         current_user = user_id
@@ -275,19 +310,34 @@ function anonymousUser(){
   current_user = user_id;
   populateUserPage("", d, true);
   swapPage("landing", "user");
-  generate_chart(true); //is anonymous
+  login_time = new Date();
+  // generate_chart(true); //is anonymous
 }
 
 function logout(){
+  resetPam();
   user_id = undefined;
   current_user = undefined;
   swapPage("user", "landing");
+  chart.dispose();
+
 }
 
 function logout1(){
+  resetPam();
   user_id = undefined;
   current_user = undefined;
   swapPage("w_garden", "landing");
+  chart.dispose();
+
+}
+
+function logout2(){
+  resetPam();
+  user_id = undefined;
+  current_user = undefined;
+  swapPage("graph", "landing");
+  chart.dispose();
 }
 
 //******SUBMIT USER REGISTRATION********
@@ -397,6 +447,7 @@ const updateSlider = (value) => {
 //I'm using an external API to build a prettier color picker
 
 function initColorPicker(){
+
 var colorPicker = new iro.ColorPicker("#picker", {
   width:150,
   height:150,
@@ -420,6 +471,7 @@ colorPicker.on('color:change', function(color) {
   user_values[4] = color.hexString;
   console.log(user_values);
 });
+
 }
 
 
@@ -448,8 +500,34 @@ function get_id(id){
             const fname = data.name[0];
             const date = data.last_login;
             populateUserPage(fname, date, false);
-            generate_chart(false);//not anonymous
+            // generate_chart(false);//not anonymous
             swapPage("landing", "user");
+            return data;
+          }
+
+    });
+      });
+}
+
+
+function get_id_no_swap(id){
+  $(document).ready(function () {
+  console.log("api call");
+    let endpoint = "http://127.0.0.1:3001/users/" + id;
+          $.ajax({
+            //beforeSend: function (jqXHR, settings) { jqXHR.setRequestHeader("Access-Control-Allow-Origin", "*");},
+              type: "get",
+              url: endpoint,
+          }).done(
+          function(data){
+            console.log("data returned");
+            console.log(data);
+            u_data = data;
+            if(data.name === undefined){
+              swapPage("landing", "user_reg");
+            }else{
+            const fname = data.name[0];
+            const date = data.last_login;
             return data;
           }
 
@@ -641,12 +719,14 @@ let user_history = [];
 let user_history_dates = [];
 let garden_history = [];
 let garden_history_dates = [];
+var chart = anychart.line();
 
 function generate_chart(isanon){
   user_history = [];
   user_history_dates = [];
   garden_history = [];
   garden_history_dates = [];
+  chart = anychart.line();
   if(isanon == true){
 
 
@@ -688,50 +768,37 @@ function generate_chart(isanon){
       j+=1;
     }
   }
-  const myChart = new Chart("lineChart", {
-    type: "line",
-    data: {
-        backgroundColor:"rgba(0,0,255,1.0)",
 
-        
-        datasets: [{label:"garden",
-        data: garden_history,
-        borderColor: "rgba(100,0,255,0.2)",
-        fill: false},
-        {
-          label: "user",
-          data: user_history,
-          borderColor: "rgba(0,0,255,0.1)",
-          fill: false
-        }
-          ]
-      },
+  
 
-    options: {scales:{
-      x: {
-        type: 'time',
-        ticks: {
-          min: new Date('Jan 1 2024'),
-          max: new Date('May 1 2024')
-        }
+  var gardenDataSet = anychart.data.set(garden_history);
 
-      },
-      y: {
-        ticks: {
-          min: 0
-        }
-      }
-      
-    }}
-  });
+  if(!isanon){
+    var userdataSet = anychart.data.set(user_history);
+    var firstSeries = chart.line(userdataSet);
+    firstSeries.name("User");
+  }
+
+var secondSeries = chart.line(gardenDataSet);
+secondSeries.name("Garden");
+chart.legend().enabled(true);
+chart.yScale().minimum(0);
+chart.yScale().maximum(100);
+chart.xScale(anychart.scales.dateTime());
+  chart.container("lineChart");
+  chart.draw();
+  
 }
+
+//to do: appending data that has been added
+
 
 
 
 // chart
-const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-const yValues = [55, 49, 44, 24, 15];
-const barColors = ["red", "green","blue","orange","brown"];
+// const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+// const yValues = [55, 49, 44, 24, 15];
+// const barColors = ["red", "green","blue","orange","brown"];
 
 // const config = {
 //   type: 'line',
@@ -749,3 +816,39 @@ const barColors = ["red", "green","blue","orange","brown"];
 //   }
 // }
 
+// const myChart = new Chart("lineChart", {
+//   type: "line",
+//   data: {
+//       backgroundColor:"rgba(0,0,255,1.0)",
+
+      
+//       datasets: [{label:"garden",
+//       data: garden_history,
+//       borderColor: "rgba(100,0,255,0.2)",
+//       fill: false},
+//       {
+//         label: "user",
+//         data: user_history,
+//         borderColor: "rgba(0,0,255,0.1)",
+//         fill: false
+//       }
+//         ]
+//     },
+
+//   options: {scales:{
+//     x: {
+//       type: 'time',
+//       ticks: {
+//         min: new Date('Jan 1 2024'),
+//         max: new Date('May 1 2024')
+//       }
+
+//     },
+//     y: {
+//       ticks: {
+//         min: 0
+//       }
+//     }
+    
+//   }}
+// });

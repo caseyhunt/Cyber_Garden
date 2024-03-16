@@ -1,10 +1,10 @@
-//to do: add email option for water garden
-//add data recording feature?
-//add back buttons to assessment
-//reset selection of pam images for next user
-//add low/high on sliders
+//to do:
+//add auto log out
+//add water garden activities
+//add back buttons to assessment?
 
-//add data recording for most recent interactions with garden (for garden health and watering)
+
+
 
 
 
@@ -45,6 +45,8 @@ document.getElementById("log_out").addEventListener("touchstart", logout);
 
 document.getElementById("log_out_1").addEventListener("click", logout1);
 document.getElementById("log_out_1").addEventListener("touchstart", logout1);
+
+document.getElementById("log_out_2").addEventListener("click", logout2);
 
 //place hand on sensor
 // document.getElementById("cancel_sensor").addEventListener("click", function(){swapPage("r_data", "user")});
@@ -101,6 +103,7 @@ document.getElementById("anon").addEventListener("click", anonymousUser);
 
 document.getElementById("graph_link").addEventListener("click", function(){swapPage("user", "graph")})
 
+document.getElementById("go_home").addEventListener("click", function(){swapPage("graph", "user")});
 
 
 

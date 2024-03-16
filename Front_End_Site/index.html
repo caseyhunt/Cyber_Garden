@@ -12,8 +12,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
 
   <!-- chart library for line chart -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script> -->
+  <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-base.min.js"></script>
 
 </head>
 
@@ -88,9 +89,12 @@
 
   <div id="graph">
 
-    <h1>Select an option to water the garden.</h1>
-    <canvas id="lineChart" style="width:50%;max-width:600px"></canvas>
-
+    <h1>History of garden health</h1>
+    <div id="lineChart" style="width:100%;max-width:600px;height:300px"></div>
+    <div class="buttons">
+      <button id="go_home">Go Home</button>
+      <button id="log_out_2">Log Out</button>
+    </div>
   </div>
 
 

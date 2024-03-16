@@ -147,7 +147,7 @@ progress[value]::-webkit-progress-value{
   margin-right:calc( ( 100vw - 750px )/2 );
 }
 
-#log_out, #log_out_1{
+#log_out, #log_out_1, #log_out_2{
   background-color: black;
   color: white;
 }
