@@ -1,55 +1,153 @@
+let composite_stress;
+let u_data = [];
+let garden_data = [];
+let login_time = 0;
+let current_time = 0;
+
+//users are logged out x minutes after logging in automatically.
+let minutes_to_logout = 10;
+//users can extend their logged in time by y minutes when prompted
+let additional_time = 5;
+
+function checkTime(){
+  current_time = new Date();
+  if(login_time != 0){
+  let time_difference = (current_time.getTime() - login_time.getTime())/(60*1000)
+  let logout;
+  if(time_difference > minutes_to_logout){
+    if (confirm("You are about to be logged out due to inactivity. Click ok to continue logging out or cancel for more time.")) {
+      logout = true;
+    } else {
+      logout = false;
+    }
+    if (logout){
+    document.getElementById(activepage).style.display = "none";
+    document.getElementById("landing").style.display = "block";
+    activepage = "landing";
+    resetPam();
+    user_id = undefined;
+    current_user = undefined;
+    chart.dispose();
+    login_time = 0;
+    logout = undefined;
+    }else{
+      additional_time = minutes_to_logout - additional_time;
+      login_time = new Date()
+      login_time = login_time.getTime() - additional_time*60*1000;
+      login_time = new Date(login_time);
+    }
+  }
+  console.log("checking");
+}
+  
+}
+
+setInterval(checkTime, 10000);
 
 
 //change which page is displayed
 function swapPage(oldPage, newPage){
   let pages_w_sliders = ["question1", "question2", "question3"]
-let pageno = oldPage.slice(-1);
+  let pageno = oldPage.slice(-1);
 
-if(newPage== "user"){
+  composite_stress = compositeStress();
+
+  //check how long user has been logged in before swapping the pages
+  //if they have been logged in too long just engage the logout process instead of
+  //going to the next page.
+
+
+//if going to the logged in user page (water garden/take assessment)
+//then re-populate the line graph
+//and clear the user values
+  if(newPage== "user"){
+      document.getElementById(oldPage).style.display = "none";
+      document.getElementById(newPage).style.display = "block";
+      activepage = newPage;
+
+      get_garden_data();
+
+      user_values = [];
+
+  }else if(pages_w_sliders.indexOf(oldPage) != -1 && user_values[pageno] == undefined ){
+      alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+  }else if(oldPage == "question4" && user_values[4] == undefined){
+    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+  }else if(oldPage == "question5" && user_values[5] == undefined){
+    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+  }else if(oldPage == "overview" && user_values[6] == undefined){
+    //alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+    user_values[6] = composite_stress;
     document.getElementById(oldPage).style.display = "none";
     document.getElementById(newPage).style.display = "block";
     activepage = newPage;
-}else if(pages_w_sliders.indexOf(oldPage) != -1 && user_values[pageno] == undefined ){
-    alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-}else if(oldPage == "question4" && user_values[4] == undefined){
-  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-}else if(oldPage == "question5" && user_values[5] == undefined){
-  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
-}else if(oldPage == "overview" && user_values[6] == undefined){
-  alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
 
-}else{
-  document.getElementById(oldPage).style.display = "none";
-  document.getElementById(newPage).style.display = "block";
-  activepage = newPage;
+  }else{
+    document.getElementById(oldPage).style.display = "none";
+    document.getElementById(newPage).style.display = "block";
+    activepage = newPage;
+  }
+
+  if(activepage == "overview"){
+
+    updateSlider(Number(composite_stress));
+
+  }
+
+  if(activepage == "graph"){
+    chart.dispose();
+    if(current_user != undefined && current_user != "anonymous"){
+      get_id_no_swap(current_user);
+      generate_chart(false);
+    }else{
+      generate_chart(true);
+    }
+
+  }
+
+  // if(newPage == "landing"){
+  //   user_id = undefined;
+  //   user_data = undefined;
+  //   document.getElementById("picker").style.backgroundColor = "white";
+  //   resetPam();
+  //   active_user = {};
+  //   user_values = [];
+  // }
+
+
+
+  if(pages_w_sliders.indexOf(newPage) != -1 ){
+    console.log("new page has a slider");
+    updateSlider(0);
+    // document.getElementById(oldPage).style.display = "none";
+    // document.getElementById(newPage).style.display = "block";
+  }
+
+
+
 }
 
-
-
-// if(newPage == "landing"){
-//   user_id = undefined;
-//   user_data = undefined;
-//   document.getElementById("picker").style.backgroundColor = "white";
-//   resetPam();
-//   active_user = {};
-//   user_values = [];
-// }
-
-if(activepage == "overview"){
-  let composite_stress = compositeStress();
-  updateSlider(composite_stress);
-}
-
-if(newPage == "recorded_result"){
+let flowercounter = 0;
+let flowers = [0,0,0,0,0,0,0];
+function dataToArduino(){
+  swapPage("overview", "recorded_result");
   console.log("result! " + user_values[6]);
+  d = new Date();
   document.getElementById("percent_stress").innerHTML = user_values[6];
+  let current_data = {'last_login': d, 'percent_stress': user_values[6], 'color': user_values[4]};
+  add_date(current_user, current_data);
   console.log(hexToRGB(user_values[4]));
   let fcolor = hexToRGB(user_values[4]);
-  let fopen = String(user_values[6]);
-  let flower = String(Math.floor(Math.random()*8));
-  flower = String(0);
-  let flowercolor = "[" + flower + "," + String(fcolor[0]) + "," + String(fcolor[1]) + "," + String(fcolor[2]) + "]";
-  let flowermotor = "[" + flower + "," + fopen + "]";
+  let fopen = String(Math.round(100-user_values[6]));
+
+  flower = String(flowercounter);
+  if(flowercounter<8){
+    flowercounter +=1;
+  }else{
+    flowercounter=0;
+  }
+  let flowercolor = "[" + 1 + "," + flowercounter + "," + String(fcolor[0]) + "," + String(fcolor[1]) + "," + String(fcolor[2]) + "]";
+  let flowermotor = "[" + 0 + "," + flowercounter + "," + fopen + "]";
   var enc = new TextEncoder(); // always utf-8
     // let data = enc.encode(flowercolor);
     // // const data = "<1>";
@@ -61,33 +159,41 @@ if(newPage == "recorded_result"){
 
     data = enc.encode(flowermotor);
     console.log(flowermotor);
+    flowers[flowercounter] = fopen;
     writeserial(data).then(writer =>{
       console.log("releasing lock");
       writer.releaseLock();
     });
 
   setTimeout(function(){
-    data = enc.encode(flowermotor);
-    console.log(flowermotor);
+    data = enc.encode(flowercolor);
+    console.log(flowercolor);
     writeserial(data).then(writer =>{
       console.log("releasing lock");
       writer.releaseLock();
     });
-},100);
+},1500);
+
+// setTimeout(function(){
+//   data = enc.encode(flowercolor);
+//   console.log(flowercolor);
+//   writeserial(data).then(writer =>{
+//     console.log("releasing lock");
+//     writer.releaseLock();
+//   });
+// },1000);
+
+// setTimeout(function(){
+//   data = enc.encode(flowermotor);
+//   console.log(flowermotor);
+//   writeserial(data).then(writer =>{
+//     console.log("releasing lock");
+//     writer.releaseLock();
+//   });
+// },1000);
 }
 
-if(pages_w_sliders.indexOf(newPage) != -1 ){
-  console.log("new page has a slider");
-  updateSlider(0);
-  // document.getElementById(oldPage).style.display = "none";
-  // document.getElementById(newPage).style.display = "block";
-}
 
-
-
-}
-
-swapPage('landing', 'start_assessment');
 
 function hexToRGB(h){
   const r = parseInt(h.slice(1,3), 16);
@@ -170,22 +276,31 @@ async function writeserial(message) {
 //*******RFID***********
 
 //rfid input
+//written for user ids
 let user_id = undefined;
-
+let current_user;
 function scanRFID(){
   console.log("running scanRFID");
   document.addEventListener('keydown', function(event) {
     //each time a key is pressed, add it to the userID
     //end input on return key (13)
     if(document.getElementById("landing").style.display == "block"){
-
+      composite_stress = "";
+      get_garden_data();
+      
       if(event.key== "Enter"){
         console.log(event.key);
         console.log("user id is: " + user_id);
+
         if(user_id != undefined){
         const user_data = get_id(user_id);
         console.log("data: " + user_data);
+        login_time = new Date();
+        get_user_data(user_id);
+        
+        
         }
+        current_user = user_id
         user_id = undefined;
       }else{
         if(user_id == undefined){
@@ -196,6 +311,43 @@ function scanRFID(){
     }
     }
   });
+}
+
+function anonymousUser(){
+  user_id = "anonymous";
+  current_user = user_id;
+  populateUserPage("", d, true);
+  login_time = new Date();
+  swapPage("landing", "user");
+
+}
+
+//this was lazy and just to keep it easy no judgement
+function logout(){
+  resetPam();
+  user_id = undefined;
+  current_user = undefined;
+  swapPage("user", "landing");
+  chart.dispose();
+  login_time = 0;
+}
+
+function logout1(){
+  resetPam();
+  user_id = undefined;
+  current_user = undefined;
+  swapPage("w_garden", "landing");
+  chart.dispose();
+  login_time = 0;
+}
+
+function logout2(){
+  resetPam();
+  user_id = undefined;
+  current_user = undefined;
+  swapPage("graph", "landing");
+  chart.dispose();
+  login_time = 0;
 }
 
 //******SUBMIT USER REGISTRATION********
@@ -209,8 +361,11 @@ function verifyRegForm(){
   const email = document.getElementById('email').value;
   var radioButtonGroup = document.getElementsByName("degree");
   var checkedRadio = Array.from(radioButtonGroup).find((radio) => radio.checked);
+  var radioButtonGroup_1 = document.getElementsByName("contacted");
+  var checkedRadio_1 = Array.from(radioButtonGroup_1).find((radio) => radio.checked);
+
   const isemail = isEmail(email);
-  let user_data = {"name": [fname, lname], "email": email, "degree": checkedRadio.value, "last_login": d};
+  let user_data = {"name": [fname, lname], "email": email, "degree": checkedRadio.value, "contact": checkedRadio_1.value, "last_login": d, "stress":["0"]};
   if("string" == typeof fname && "string" == typeof lname && isemail){
     console.log("form completed " + fname + " " + lname);
     populateUserPage(fname, d, true);
@@ -239,7 +394,6 @@ function populateUserPage(name, date, first_visit){
     let days = new Date(date);
     days = daysSince(days).toString();
     console.log('days since ' + daysSince(days));
-    add_date(user_id, {"last_login": d});
     document.getElementById("uname").innerHTML = "Back "+ name;
     //to-do: add math for weeks/months?
     document.getElementById("itsbeen").innerHTML = "It's been " + days + " days since we last saw you.";
@@ -247,7 +401,7 @@ function populateUserPage(name, date, first_visit){
   }else{
 
     document.getElementById("uname").innerHTML = name;
-    document.getElementById('itsbeen').innerHTML = "This is your first visit! Click here for a tutorial and information about the project.";
+    document.getElementById('itsbeen').innerHTML = "This is your first visit! Thank you for trying our project.";
   }
 }
 
@@ -267,7 +421,7 @@ for(let i=0; i<document.querySelectorAll(".slider").length;i++){
     updateSlider(e.target.value);
 
     if(activepage == "overview"){
-      user_values[6] = e.target.value;
+      user_values[6] = Math.round(e.target.value);
       console.log(user_values);
     }else{
     let pageno = activepage.slice(-1);
@@ -303,6 +457,7 @@ const updateSlider = (value) => {
 //I'm using an external API to build a prettier color picker
 
 function initColorPicker(){
+
 var colorPicker = new iro.ColorPicker("#picker", {
   width:150,
   height:150,
@@ -326,6 +481,7 @@ colorPicker.on('color:change', function(color) {
   user_values[4] = color.hexString;
   console.log(user_values);
 });
+
 }
 
 
@@ -347,12 +503,14 @@ function get_id(id){
           function(data){
             console.log("data returned");
             console.log(data);
+            u_data = data;
             if(data.name === undefined){
               swapPage("landing", "user_reg");
             }else{
             const fname = data.name[0];
             const date = data.last_login;
             populateUserPage(fname, date, false);
+            // generate_chart(false);//not anonymous
             swapPage("landing", "user");
             return data;
           }
@@ -362,10 +520,37 @@ function get_id(id){
 }
 
 
+function get_id_no_swap(id){
+  $(document).ready(function () {
+  console.log("api call");
+    let endpoint = "http://127.0.0.1:3001/users/" + id;
+          $.ajax({
+            //beforeSend: function (jqXHR, settings) { jqXHR.setRequestHeader("Access-Control-Allow-Origin", "*");},
+              type: "get",
+              url: endpoint,
+          }).done(
+          function(data){
+            console.log("data returned");
+            console.log(data);
+            u_data = data;
+            if(data.name === undefined){
+              swapPage("landing", "user_reg");
+            }else{
+            const fname = data.name[0];
+            const date = data.last_login;
+            return data;
+          }
+
+    });
+      });
+}
+
+//troubleshoot, somehow this is broken and the UID being sent is always undefined
+
 function create_user(id, user_data){
     $(document).ready(function () {
       let endpoint = "http://127.0.0.1:3001/users/";
-      let userID = id;
+      let userID = current_user;
       let data = user_data;
             $.ajax({
                 type: "put",
@@ -373,7 +558,9 @@ function create_user(id, user_data){
                 url: endpoint + userID,
             }).done(
             function(data){
+             
         console.log("Data: " + JSON.stringify(data));
+       
       });
         });
       }
@@ -383,6 +570,7 @@ function add_date(id, user_data){
     let endpoint = "http://127.0.0.1:3001/users/";
     let userID = id;
     let data = user_data;
+    // data = {"percent_stress": 80}
     console.log(data);
           $.ajax({
               type: "post",
@@ -391,10 +579,46 @@ function add_date(id, user_data){
           }).done(
           function(data){
       console.log("Data: " + JSON.stringify(data));
+      
     });
       });
 }
 
+function get_garden_data(){
+  $(document).ready(function () {
+    let endpoint = "http://127.0.0.1:3001/garden";
+          $.ajax({
+              type: "post",
+              // data: data,
+              url: endpoint,
+          }).done(
+          function(data){
+      console.log("Data: " + JSON.stringify(data));
+      garden_data = data;
+     // document.getElementById("garden").value = data['stress'];
+    });
+      });
+    }
+
+  get_garden_data();
+
+  function get_user_data(id){
+    $(document).ready(function () {
+      let endpoint = "http://127.0.0.1:3001/data/";
+      let userID = id;
+      // data = {"percent_stress": 80}
+      console.log(data);
+            $.ajax({
+                type: "get",
+                url: endpoint + userID,
+            }).done(
+            function(data){
+        console.log("Data: " + JSON.stringify(data));
+        u_data = data;
+        
+      });
+        });
+  }
 
 //*******Populate PAM Images**********
 //using the images from the PAM project
@@ -500,3 +724,80 @@ function compositeStress(){
   return total_stress;
   
 }
+
+let user_history = [];
+let user_history_dates = [];
+let garden_history = [];
+let garden_history_dates = [];
+var chart = anychart.line();
+
+function generate_chart(isanon){
+  user_history = [];
+  user_history_dates = [];
+  garden_history = [];
+  garden_history_dates = [];
+  chart = anychart.line();
+  if(isanon == true){
+
+
+  }else{
+    j = 0;
+    for(i=0; i<u_data["stress"].length; i++){
+      
+      console.log(u_data["stress"][i] != null);
+      if(i%3 == 1){
+        user_history[j]= {
+          x: 1,
+          y: Number(u_data["stress"][i])
+        
+        };
+
+        console.log("user stress 0: " + u_data["stress"][i])
+      }else if(i%3 ==2){
+          user_history[j]["x"] = new Date(u_data["stress"][i]);
+        j+=1;
+        console.log("user stress 1: " + u_data["stress"][i])
+        
+      }else if(i%3 == 0 && i>0){
+
+        
+
+      }
+    }
+
+  }
+  j = 0;
+  for(i=0; i<garden_data.length; i++){
+    if(i%2 == 0){
+      garden_history[j] = {
+        x: 1,
+        y: Number(garden_data[i])
+      };
+    }else if(i%2 ==1){
+      garden_history[j]["x"] = new Date(garden_data[i]);
+      j+=1;
+    }
+  }
+
+  
+
+  var gardenDataSet = anychart.data.set(garden_history);
+
+  if(!isanon){
+    var userdataSet = anychart.data.set(user_history);
+    var firstSeries = chart.line(userdataSet);
+    firstSeries.name("User");
+  }
+
+var secondSeries = chart.line(gardenDataSet);
+secondSeries.name("Garden");
+chart.legend().enabled(true);
+chart.yScale().minimum(0);
+chart.yScale().maximum(100);
+chart.xScale(anychart.scales.dateTime());
+  chart.container("lineChart");
+  chart.draw();
+  
+}
+
+//to do: appending data that has been added

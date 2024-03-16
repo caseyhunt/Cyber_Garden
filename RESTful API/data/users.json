@@ -1,83 +1,107 @@
 {
-  "nA3E309A3": {
+  "garden": {
+    "stress": [
+      "49.400000000000006",
+      "Jan 1 2024 14:22:15 GMT-0700 (Mountain Standard Time)",
+      "25",
+      "Sat Feb 03 2024 14:22:15 GMT-0700 (Mountain Standard Time)",
+      "54",
+      "Tue Feb 06 2024 14:16:05 GMT-0700 (Mountain Standard Time)",
+      "54",
+      "Tue Feb 27 2024 14:16:05 GMT-0700 (Mountain Standard Time)",
+      "NaN",
+      "Thu Mar 14 2024 19:46:04 GMT-0600 (Mountain Daylight Time)"
+    ],
+    "stress_queue": [
+      "29.5",
+      "Thu Mar 14 2024 19:47:12 GMT-0600 (Mountain Daylight Time)",
+      "29.5",
+      "Thu Mar 14 2024 19:47:12 GMT-0600 (Mountain Daylight Time)",
+      "24.400000000000002",
+      "Thu Mar 14 2024 19:51:19 GMT-0600 (Mountain Daylight Time)",
+      "24.400000000000002",
+      "Thu Mar 14 2024 19:51:19 GMT-0600 (Mountain Daylight Time)",
+      "55.7",
+      "Thu Mar 14 2024 19:54:11 GMT-0600 (Mountain Daylight Time)",
+      "55.7",
+      "Thu Mar 14 2024 19:54:11 GMT-0600 (Mountain Daylight Time)",
+      "49",
+      "Thu Mar 14 2024 19:54:11 GMT-0600 (Mountain Daylight Time)",
+      "88",
+      "Thu Mar 14 2024 19:56:44 GMT-0600 (Mountain Daylight Time)",
+      "40",
+      "Thu Mar 14 2024 19:58:32 GMT-0600 (Mountain Daylight Time)",
+      "36",
+      "Fri Mar 15 2024 20:39:36 GMT-0600 (Mountain Daylight Time)"
+    ]
+  },
+  "anonymous": {
+    "name": [
+      "anonymous",
+      "anonymous"
+    ],
+    "email": "anonymous@anonymous",
+    "degree": "anon",
+    "contact": "anon",
+    "last_login": "Fri Mar 15 2024 20:39:36 GMT-0600 (Mountain Daylight Time)",
+    "stress": [
+      "#ffd3c2",
+      "36",
+      "Fri Mar 15 2024 20:39:36 GMT-0600 (Mountain Daylight Time)"
+    ]
+  },
+  "041851FA0D5980": {
     "name": [
       "Casey",
       "Hunt"
     ],
     "email": "casey.hunt@colorado.edu",
     "degree": "dr",
-    "last_login": "Mon Nov 14 2022 19:25:56 GMT-0700 (Mountain Standard Time)"
-  },
-  "A3E309A3": {
-    "name": [
-      "Casey",
-      "Hunt"
-    ],
-    "email": "casey.hunt@colorado.edu",
-    "degree": "dr",
-    "last_login": "Sat Dec 10 2022 14:41:04 GMT-0700 (Mountain Standard Time)"
-  },
-  "60E91293": {
-    "name": [
-      "c",
-      "h"
-    ],
-    "email": "c@h.com",
-    "degree": "b",
-    "last_login": "Thu Dec 01 2022 15:15:52 GMT-0700 (Mountain Standard Time)"
-  },
-  "\u0011\u0010I60E91293": {
-    "name": [
-      "c",
-      "h"
-    ],
-    "email": "c@h.com",
-    "degree": "b",
-    "last_login": "Thu Dec 01 2022 14:41:05 GMT-0700 (Mountain Standard Time)"
-  },
-  "041851FA0D5980041851FA0D5980": {
-    "name": [
-      "Casey",
-      "Hunt"
-    ],
-    "email": "casey.hunt@colorado.edu",
-    "degree": "m",
-    "last_login": "Sat Dec 10 2022 14:17:26 GMT-0700 (Mountain Standard Time)"
-  },
-  "AAA333EEE333000999AAA333": {
-    "name": [
-      "casey",
-      "hunt"
-    ],
-    "email": "casey.hunt@colorado.edu",
-    "degree": "dr",
-    "last_login": "Sat Dec 10 2022 14:35:56 GMT-0700 (Mountain Standard Time)"
-  },
-  "004411885511FFAA00DD55998800": {
-    "name": [
-      "Casey",
-      "Hunt"
-    ],
-    "email": "casey.hunt@colorado.edu",
-    "degree": "b",
-    "last_login": "Sat Dec 10 2022 14:28:14 GMT-0700 (Mountain Standard Time)"
-  },
-  "AAAA3333EEEE333300009999AAAA3333": {
-    "name": [
-      "Casey",
-      "Hunt"
-    ],
-    "email": "casey.hunt@colorado.edu",
-    "degree": "b",
-    "last_login": "Sat Dec 10 2022 14:23:10 GMT-0700 (Mountain Standard Time)"
-  },
-  "undefined": {
-    "name": [
-      "Casey",
-      "Hunt"
-    ],
-    "email": "ca@h.com",
-    "degree": "b",
-    "last_login": "Thu Feb 09 2023 15:50:14 GMT-0700 (Mountain Standard Time)"
+    "contact": "y",
+    "last_login": "Thu Mar 14 2024 19:58:32 GMT-0600 (Mountain Daylight Time)",
+    "stress": [
+      "#f8ff36",
+      "40",
+      "Thu Mar 14 2024 19:58:32 GMT-0600 (Mountain Daylight Time)",
+      "#f2ff63",
+      "88",
+      "Thu Mar 14 2024 19:56:44 GMT-0600 (Mountain Daylight Time)",
+      "#61ff6e",
+      "49",
+      "Thu Mar 14 2024 19:54:11 GMT-0600 (Mountain Daylight Time)",
+      "#6effb1",
+      "55.7",
+      "Thu Mar 14 2024 19:54:11 GMT-0600 (Mountain Daylight Time)",
+      "#6effb1",
+      "55.7",
+      "Thu Mar 14 2024 19:54:11 GMT-0600 (Mountain Daylight Time)",
+      "#fffd6e",
+      "24.400000000000002",
+      "Thu Mar 14 2024 19:51:19 GMT-0600 (Mountain Daylight Time)",
+      "#fffd6e",
+      "24.400000000000002",
+      "Thu Mar 14 2024 19:51:19 GMT-0600 (Mountain Daylight Time)",
+      "#21ff51",
+      "29.5",
+      "Thu Mar 14 2024 19:47:12 GMT-0600 (Mountain Daylight Time)",
+      "#21ff51",
+      "29.5",
+      "Thu Mar 14 2024 19:47:12 GMT-0600 (Mountain Daylight Time)",
+      "#ff337a",
+      "55.1",
+      "Thu Mar 14 2024 19:46:04 GMT-0600 (Mountain Daylight Time)",
+      "#ff337a",
+      "55.1",
+      "Thu Mar 14 2024 19:46:04 GMT-0600 (Mountain Daylight Time)",
+      "#ff968f",
+      "49.400000000000006",
+      "Tue Feb 27 2024 14:22:15 GMT-0700 (Mountain Standard Time)",
+      "#ff968f",
+      "49.400000000000006",
+      "Tue Feb 27 2024 14:22:15 GMT-0700 (Mountain Standard Time)",
+      null,
+      "54",
+      "Tue Feb 27 2024 14:16:05 GMT-0700 (Mountain Standard Time)"
+    ]
   }
 }
