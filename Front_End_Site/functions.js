@@ -3,7 +3,47 @@ let u_data = [];
 let garden_data = [];
 let login_time = 0;
 let current_time = 0;
-let minutes_to_logout = 20;
+
+//users are logged out x minutes after logging in automatically.
+let minutes_to_logout = 10;
+//users can extend their logged in time by y minutes when prompted
+let additional_time = 5;
+
+function checkTime(){
+  current_time = new Date();
+  if(login_time != 0){
+  let time_difference = (current_time.getTime() - login_time.getTime())/(60*1000)
+  let logout;
+  if(time_difference > minutes_to_logout){
+    if (confirm("You are about to be logged out due to inactivity. Click ok to continue logging out or cancel for more time.")) {
+      logout = true;
+    } else {
+      logout = false;
+    }
+    if (logout){
+    document.getElementById(activepage).style.display = "none";
+    document.getElementById("landing").style.display = "block";
+    activepage = "landing";
+    resetPam();
+    user_id = undefined;
+    current_user = undefined;
+    chart.dispose();
+    login_time = 0;
+    logout = undefined;
+    }else{
+      additional_time = minutes_to_logout - additional_time;
+      login_time = new Date()
+      login_time = login_time.getTime() - additional_time*60*1000;
+      login_time = new Date(login_time);
+    }
+  }
+  console.log("checking");
+}
+  
+}
+
+setInterval(checkTime, 10000);
+
 
 //change which page is displayed
 function swapPage(oldPage, newPage){
@@ -15,22 +55,12 @@ function swapPage(oldPage, newPage){
   //check how long user has been logged in before swapping the pages
   //if they have been logged in too long just engage the logout process instead of
   //going to the next page.
-  current_time = new Date();
-  let time_difference = (current_time.getTime() - login_time.getTime())/(60*1000)
-  if(time_difference > minutes_to_logout){
-    alert("Sorry, you have been logged out due to inactivity");
-    document.getElementById(oldPage).style.display = "none";
-    document.getElementById("landing").style.display = "block";
-    resetPam();
-    user_id = undefined;
-    current_user = undefined;
-    chart.dispose();
-  }
+
 
 //if going to the logged in user page (water garden/take assessment)
 //then re-populate the line graph
 //and clear the user values
-  else if(newPage== "user"){
+  if(newPage== "user"){
       document.getElementById(oldPage).style.display = "none";
       document.getElementById(newPage).style.display = "block";
       activepage = newPage;
@@ -48,6 +78,10 @@ function swapPage(oldPage, newPage){
   }else if(oldPage == "overview" && user_values[6] == undefined){
     //alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
     user_values[6] = composite_stress;
+    document.getElementById(oldPage).style.display = "none";
+    document.getElementById(newPage).style.display = "block";
+    activepage = newPage;
+
   }else{
     document.getElementById(oldPage).style.display = "none";
     document.getElementById(newPage).style.display = "block";
@@ -279,48 +313,23 @@ function scanRFID(){
   });
 }
 
-//written for anonymous rfid
-// function scanRFID(){
-//   console.log("running scanRFID");
-//   document.addEventListener('keydown', function(event) {
-//     //each time a key is pressed, add it to the userID
-//     //end input on return key (13)
-//     if(document.getElementById("landing").style.display == "block"){
-//       composite_stress = "";
-//       get_users();
-//       if(event.key== "Enter"){
-//         console.log(event.key);
-//         console.log("user id is: " + user_id);
-//         current_user = user_id
-//         user_id = undefined;
-//         swapPage("landing", "user");
-//       }else{
-//         if(user_id == undefined){
-//           user_id = String.fromCharCode(event.keyCode)
-//         }else{
-//       user_id += String.fromCharCode(event.keyCode);
-//         }
-//     }
-//     }
-//   });
-// }
-
 function anonymousUser(){
   user_id = "anonymous";
   current_user = user_id;
   populateUserPage("", d, true);
-  swapPage("landing", "user");
   login_time = new Date();
-  // generate_chart(true); //is anonymous
+  swapPage("landing", "user");
+
 }
 
+//this was lazy and just to keep it easy no judgement
 function logout(){
   resetPam();
   user_id = undefined;
   current_user = undefined;
   swapPage("user", "landing");
   chart.dispose();
-
+  login_time = 0;
 }
 
 function logout1(){
@@ -329,7 +338,7 @@ function logout1(){
   current_user = undefined;
   swapPage("w_garden", "landing");
   chart.dispose();
-
+  login_time = 0;
 }
 
 function logout2(){
@@ -338,6 +347,7 @@ function logout2(){
   current_user = undefined;
   swapPage("graph", "landing");
   chart.dispose();
+  login_time = 0;
 }
 
 //******SUBMIT USER REGISTRATION********
@@ -791,64 +801,3 @@ chart.xScale(anychart.scales.dateTime());
 }
 
 //to do: appending data that has been added
-
-
-
-
-// chart
-// const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-// const yValues = [55, 49, 44, 24, 15];
-// const barColors = ["red", "green","blue","orange","brown"];
-
-// const config = {
-//   type: 'line',
-//   data,
-//   options: {
-//     scales:{
-//       x: {
-//         type: 'time',
-//         time: {
-//           unit: 'day'
-//         }
-//       }
-      
-//     }
-//   }
-// }
-
-// const myChart = new Chart("lineChart", {
-//   type: "line",
-//   data: {
-//       backgroundColor:"rgba(0,0,255,1.0)",
-
-      
-//       datasets: [{label:"garden",
-//       data: garden_history,
-//       borderColor: "rgba(100,0,255,0.2)",
-//       fill: false},
-//       {
-//         label: "user",
-//         data: user_history,
-//         borderColor: "rgba(0,0,255,0.1)",
-//         fill: false
-//       }
-//         ]
-//     },
-
-//   options: {scales:{
-//     x: {
-//       type: 'time',
-//       ticks: {
-//         min: new Date('Jan 1 2024'),
-//         max: new Date('May 1 2024')
-//       }
-
-//     },
-//     y: {
-//       ticks: {
-//         min: 0
-//       }
-//     }
-    
-//   }}
-// });
