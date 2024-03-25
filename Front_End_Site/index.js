@@ -105,6 +105,14 @@ document.getElementById("graph_link").addEventListener("click", function(){swapP
 
 document.getElementById("go_home").addEventListener("click", function(){swapPage("graph", "user")});
 
+document.getElementById("bubble").addEventListener("click", function(){swapPage("w_garden", "bubbles")});
+
+document.getElementById("pinwheel_select").addEventListener("click", function(){swapPage("w_garden", "pinwheel")});
+// document.getElementById("pinwheel_select").addEventListener("click", function(){swapPage("w_garden", "pinwheel_animation")});
 
 
+
+for(i=0; i<document.querySelectorAll(".go_back").length; i++){
+    document.querySelectorAll(".go_back")[i].addEventListener("click", function(){swapPage(activepage, "w_garden")});
+}
 

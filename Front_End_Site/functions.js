@@ -4,6 +4,9 @@ let garden_data = [];
 let login_time = 0;
 let current_time = 0;
 
+let spinning = false;
+let spinning_time = new Date();
+
 //users are logged out x minutes after logging in automatically.
 let minutes_to_logout = 10;
 //users can extend their logged in time by y minutes when prompted
@@ -43,6 +46,19 @@ function checkTime(){
 }
 
 setInterval(checkTime, 10000);
+
+function checkSpinTime(){
+  current_time = new Date();
+  let time_difference = (current_time.getTime() - spinning_time.getTime())/(1000)
+  if(time_difference > 1){
+    spinning = false
+  }
+  console.log("checking spin");
+}
+
+if(spinning == true){
+  setInterval(checkSpinTime, 1000);
+}
 
 
 //change which page is displayed
@@ -204,6 +220,12 @@ function hexToRGB(h){
 }
 
 
+
+function waterGarden(){
+  for(i=0, i<flowers.length, i++){
+    flowers[i] = flowers[i] + 3;
+  }
+}
 //*******GENERATE DATE FOR USER HISTORY***********
 //for testing: add your own date month/day/year
 // let d = new Date("11/1/2022");
@@ -217,6 +239,7 @@ function daysSince(date){
   console.log(diff);
   return diff;
 }
+
 
 async function openPort(){
   console.log("serial menu opening");
@@ -235,14 +258,22 @@ async function openPort(){
       while (true) {
 
         const { value, done } = await reader.read();
-
+        console.log("serial reading:" + value);
+        if(String(value).slice(0,1) == "s"){
+          spinning = true;
+          console.log('spinning pinwheel');
+          spinning_time = new Date();
+        }
         if (done) {
           // |reader| has been canceled.
 
           break;
         }
         // Do something with |value|…
-        console.log("serial reading:" + value);
+
+        // else{
+        //   spinning = false;
+        // }
         console.log(String(value).slice(0, 5) == "start");
         if(String(value).slice(0, 5) == "start" && document.getElementById("r_data").style.display == "block"){
           console.log("switching page");
@@ -271,6 +302,7 @@ async function writeserial(message) {
   return writer;
 }
 }
+
 
 
 //*******RFID***********
