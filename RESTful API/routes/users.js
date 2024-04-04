@@ -38,6 +38,7 @@ const userRoutes = (app, fs) => {
     // READ
     app.post('/garden', (req, res) => {
         fs.readFile(dataPath, 'utf8', (err, data) => {
+            console.log("post rec");
             data = JSON.parse(data)
             //1. is the last average taken farther away in time from the oldest reading than the window size?
             // if yes ==> then calculate a new average.
@@ -56,7 +57,7 @@ const userRoutes = (app, fs) => {
             let diff = (last_date.getTime() - cur_date.getTime()) / (1000 * 60 * 60 * 24);
             
             //this can be set to any size to batch averages, say by week.
-            let window_size = 5;
+            let window_size = 1;
             
             //goal: calculate new average in chunks from stress queue until caught up
             //remove each item in the queue as it is added into average
@@ -134,8 +135,13 @@ const userRoutes = (app, fs) => {
         fs.readFile(dataPath, 'utf8', (err, data) => {
             data = JSON.parse(data)
             uid = req.params["id"];
+            console.log("request recieved");
+            if(data[uid] != undefined){
             let stress_user = data[uid]['stress'];
             res.status(200).send(stress_user);
+            }else{
+                res.status(200).send("no user");
+            }
         });
     });
 
@@ -205,20 +211,20 @@ const userRoutes = (app, fs) => {
 
 
     // DELETE
-    app.delete('/users/:id', (req, res) => {
+    // app.delete('/users/:id', (req, res) => {
 
-        readFile(data => {
+    //     readFile(data => {
 
-            // delete the user
-            const userId = req.params["id"];
-            delete data[userId];
+    //         // delete the user
+    //         const userId = req.params["id"];
+    //         delete data[userId];
 
-            writeFile(JSON.stringify(data, null, 2), () => {
-                res.status(200).send(`users id:${userId} removed`);
-            });
-        },
-            true);
-    });
+    //         writeFile(JSON.stringify(data, null, 2), () => {
+    //             res.status(200).send(`users id:${userId} removed`);
+    //         });
+    //     },
+    //         true);
+    // });
 
     
 };

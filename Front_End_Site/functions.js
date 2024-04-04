@@ -50,7 +50,7 @@ setInterval(checkTime, 10000);
 function checkSpinTime(){
   current_time = new Date();
   let time_difference = (current_time.getTime() - spinning_time.getTime())/(1000)
-  if(time_difference > 1){
+  if(time_difference > .2){
     spinning = false
   }
   console.log("checking spin");
@@ -114,7 +114,7 @@ function swapPage(oldPage, newPage){
     chart.dispose();
     if(current_user != undefined && current_user != "anonymous"){
       get_id_no_swap(current_user);
-      generate_chart(false);
+      // generate_chart(false);
     }else{
       generate_chart(true);
     }
@@ -144,7 +144,7 @@ function swapPage(oldPage, newPage){
 }
 
 let flowercounter = 0;
-let flowers = [0,0,0,0,0,0,0];
+let flowers = [0,0,0,0,0,0];
 function dataToArduino(){
   swapPage("overview", "recorded_result");
   console.log("result! " + user_values[6]);
@@ -157,7 +157,7 @@ function dataToArduino(){
   let fopen = String(Math.round(100-user_values[6]));
 
   flower = String(flowercounter);
-  if(flowercounter<8){
+  if(flowercounter<5){
     flowercounter +=1;
   }else{
     flowercounter=0;
@@ -175,7 +175,7 @@ function dataToArduino(){
 
     data = enc.encode(flowermotor);
     console.log(flowermotor);
-    flowers[flowercounter] = fopen;
+    flowers[flowercounter] = Number(fopen);
     writeserial(data).then(writer =>{
       console.log("releasing lock");
       writer.releaseLock();
@@ -220,12 +220,51 @@ function hexToRGB(h){
 }
 
 
+counter = 0;
+async function waterGarden(n){
+  // for(i=0; i<flowers.length; i++){
+  //   flowers[i] = flowers[i] + 5;
+  //   console.log("watering garden");
+  //   var enc = new TextEncoder();
+  //   data = enc.encode(flowers[i]);
+  //   console.log(data);
+  //   writeserial(data).then(writer =>{
+  //     console.log("releasing lock");
+  //     writer.releaseLock();
+  //   });
+    
+  // }
 
-function waterGarden(){
-  for(i=0, i<flowers.length, i++){
-    flowers[i] = flowers[i] + 3;
-  }
+if(flowers[counter]<70){
+    flowers[counter] = flowers[counter] + n;
+    console.log("watering garden");
+    console.log(flowers[counter]);
+    data = "[" + "0," + String(counter) + "," + String(flowers[counter]) + "]";
+    var enc = new TextEncoder();
+    console.log(data);
+    data = enc.encode(data);
+    console.log(data);
 }
+if(counter < 5){
+  counter += 1
+  console.log("adding one to counter");
+}else{
+  counter = 0
+  console.log("resetting counter");
+}
+
+console.log(flowers);
+
+await setTimeout(function(){
+  writeserial(data).then(writer =>{
+    console.log("releasing lock");
+    writer.releaseLock();
+  });
+},1000);
+
+
+}
+
 //*******GENERATE DATE FOR USER HISTORY***********
 //for testing: add your own date month/day/year
 // let d = new Date("11/1/2022");
@@ -570,7 +609,9 @@ function get_id_no_swap(id){
             }else{
             const fname = data.name[0];
             const date = data.last_login;
+            generate_chart(false);
             return data;
+            
           }
 
     });
@@ -671,6 +712,8 @@ function populatePAM(){
   }
   for(i=1; i<=img_folders.length; i++){
   document.getElementById("pam_" + i).addEventListener("click", pamClicked);
+  document.getElementById("pam_" + i).addEventListener("touchstart", pamClicked);
+
   }
 }
 
@@ -773,6 +816,8 @@ function generate_chart(isanon){
 
 
   }else{
+    console.log("generating chart");
+    console.log(u_data);
     j = 0;
     for(i=0; i<u_data["stress"].length; i++){
       
@@ -819,10 +864,12 @@ function generate_chart(isanon){
     var userdataSet = anychart.data.set(user_history);
     var firstSeries = chart.line(userdataSet);
     firstSeries.name("User");
+    firstSeries.markers(true);
   }
 
 var secondSeries = chart.line(gardenDataSet);
 secondSeries.name("Garden");
+secondSeries.markers(true);
 chart.legend().enabled(true);
 chart.yScale().minimum(0);
 chart.yScale().maximum(100);

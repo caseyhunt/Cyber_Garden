@@ -19,7 +19,7 @@ img.addEventListener('click',function(e){
     let id = this.id;
     let n = id.charAt(id.length-1);
     let n1 = id.charAt(id.length-2);
-    waterGarden();
+    
     if(n == "s"){
         n = 0;
     }else if(n1 != "s" && n1 != e){
@@ -29,9 +29,11 @@ img.addEventListener('click',function(e){
     toggle[n] =!toggle[n];
     if(toggle[n]){
         img.src = 'images/bubble.png';
+        waterGarden(3);
     }
     else{
         img.src = 'images/bubblepoped.png';
+        waterGarden(3);
     }
 })
 
@@ -45,4 +47,5 @@ function resetBubbles(){
     }
 }
 
-document.getElementById("reset_bubbles").addEventListener("click", resetBubbles)
+document.getElementById("reset_bubbles").addEventListener("click", resetBubbles);
+document.getElementById("reset_bubbles").addEventListener("touchstart", resetBubbles)

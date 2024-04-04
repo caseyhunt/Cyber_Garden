@@ -24,7 +24,7 @@ function draw() {
   image(stick,0,0);
   push();
 
-
+if(activepage == "pinwheel"){
   if(spinning == true){
     if(acc < 3){
     acc = acc + 0.05
@@ -32,7 +32,10 @@ function draw() {
     a = a + acc; 
     rotate(a);
     checkSpinTime();
-    waterGarden();
+    // if(frameCount%5 == 0){
+    // console.log("spinning");
+    // }
+    
   }else{
     if(acc <= 0){
       acc = 0;
@@ -41,8 +44,14 @@ function draw() {
       acc = acc - 0.01;
       a = a + acc;
       rotate(a);
+          if(frameCount%100 == 0){
+      waterGarden(5);
+    }
+
+      
     }
   }
+}
   imageMode(CENTER);
   image(pw, 1, 1);
   pop();
