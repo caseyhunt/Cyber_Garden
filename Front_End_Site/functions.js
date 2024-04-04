@@ -84,9 +84,13 @@ function swapPage(oldPage, newPage){
       get_garden_data();
 
       user_values = [];
+      return;
 
   }else if(pages_w_sliders.indexOf(oldPage) != -1 && user_values[pageno] == undefined ){
       alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
+      console.log("testing");
+      console.log(user_values[pageno]);
+      console.log(page_no);
   }else if(oldPage == "question4" && user_values[4] == undefined){
     alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
   }else if(oldPage == "question5" && user_values[5] == undefined){
