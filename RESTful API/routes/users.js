@@ -29,6 +29,7 @@ const userRoutes = (app, fs) => {
         fs.writeFile(filePath, fileData, encoding, (err) => {
             if (err) {
                 throw err;
+                
             }
 
             callback();
@@ -89,11 +90,14 @@ const userRoutes = (app, fs) => {
 
             let last_avg_date = new Date(stress[stress.length-1]);
             let oldest_reading_date = new Date(stress_queue[1]);
+            if(stress.length < 1 || stress == undefined){
+                last_avg_date = new Date();
+            }
             let difference = (oldest_reading_date.getTime() - last_avg_date.getTime()) / (1000 * 60 * 60 * 24);
             let next_value;
             let current_date = new Date();
            
-            while(difference > window_size && stress_queue.length != 0){
+            while(difference > window_size && stress_queue.length >1){
                 start_of_range = new Date(stress_queue[1]);
                 next_value = new Date(stress_queue[3]);
 
@@ -145,9 +149,13 @@ const userRoutes = (app, fs) => {
             // if (err) {
             //     throw err;
             // }
+            console.log("writing data from garden ", data);
             if(data != undefined){
-            writeFile(JSON.stringify(data, null, 2), () => {
-                res.status(200).send(data['garden']['stress']);
+                let garden_data = data['garden']['stress'];
+                data = JSON.stringify(data, null, 2);
+                
+            writeFile(data, () => {
+                res.status(200).send(garden_data);
             });
         }
            
@@ -189,6 +197,7 @@ const userRoutes = (app, fs) => {
             // }else
             //     data[userId]['stress'].splice(-2, 2);
             // }
+            console.log("request to add stress data ", data);
             if(data != undefined){
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send('date');
@@ -212,12 +221,16 @@ const userRoutes = (app, fs) => {
             data[userId] = req.body;
             console.log(userId);
             console.log(req.body);
-            console.log("data = ", data);
+            
             // appendFile(JSON.stringify(data, null, 2), () => {
             //     res.status(200).send(`users id:${userId} updated`);
             // });
+            console.log("req to add new user ", data);
+            data = JSON.stringify(data, null, 2)
+            console.log("what is going on ", data);
+
             if(data != undefined){
-            writeFile(JSON.stringify(data, null, 2), () => {
+            writeFile(data, () => {
                 res.status(200).send(`users id:${userId} updated`);
             });
         }

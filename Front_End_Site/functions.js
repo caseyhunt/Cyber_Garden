@@ -362,7 +362,7 @@ function scanRFID(){
     //end input on return key (13)
     if(document.getElementById("landing").style.display == "block"){
       composite_stress = "";
-      get_garden_data();
+      // get_garden_data();
       
       if(event.key== "Enter"){
         console.log(event.key);
@@ -398,7 +398,7 @@ function scanRFID(){
 function anonymousUser(){
   user_id = "anonymous";
   current_user = user_id;
-  populateUserPage("", d, true);
+  populateUserPage(d, true);
   login_time = new Date();
   swapPage("landing", "user");
 
@@ -623,7 +623,7 @@ function get_id_no_swap(id){
               
               let user_data = {"last_login": d, "stress":["0"]};
               create_user(id, user_data);
-              populateUserPage(date, true);
+              populateUserPage(d, true);
             }else{
             // const fname = data.name[0];
             const date = data.last_login;
