@@ -580,7 +580,7 @@ function get_id(id){
             console.log("data returned");
             console.log(data);
             u_data = data;
-            if(data.last_login === undefined){
+            if(data == undefined){
               
               let user_data = {"last_login": d, "stress":["0"]};
               create_user(id, user_data);
