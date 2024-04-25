@@ -57,8 +57,9 @@ const userRoutes = (app, fs) => {
         fs.readFile(dataPath, 'utf8', (err, data) => {
             console.log("post rec");
             data = JSON.parse(data);
-            if(data != undefined){
             console.log("data = ", data);
+            if(data != undefined){
+            
             
             //1. is the last average taken farther away in time from the oldest reading than the window size?
             // if yes ==> then calculate a new average.
@@ -144,9 +145,11 @@ const userRoutes = (app, fs) => {
             // if (err) {
             //     throw err;
             // }
+            if(data != undefined){
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send(data['garden']['stress']);
             });
+        }
            
             
         }});
@@ -186,9 +189,11 @@ const userRoutes = (app, fs) => {
             // }else
             //     data[userId]['stress'].splice(-2, 2);
             // }
+            if(data != undefined){
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send('date');
             });
+        }
            
         },
             true);
@@ -211,9 +216,11 @@ const userRoutes = (app, fs) => {
             // appendFile(JSON.stringify(data, null, 2), () => {
             //     res.status(200).send(`users id:${userId} updated`);
             // });
+            if(data != undefined){
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send(`users id:${userId} updated`);
             });
+        }
         }},
             true);
     });
