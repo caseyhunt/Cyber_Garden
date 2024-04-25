@@ -371,8 +371,14 @@ function scanRFID(){
         if(user_id != undefined){
         const user_data = get_id(user_id);
         console.log("data: " + user_data);
+        // if(user_data == "undefined"){
+        //   let user_data = {"last_login": d, "stress":["0"]};
+        //   create_user(user_id, user_data);
+        // }else{
+          get_user_data(user_id);
+        // }
         login_time = new Date();
-        get_user_data(user_id);
+        
         
         
         }
@@ -580,12 +586,12 @@ function get_id(id){
             console.log("data returned");
             console.log(data);
             u_data = data;
-            if(data == undefined){
-              
-              let user_data = {"last_login": d, "stress":["0"]};
-              create_user(id, user_data);
-              populateUserPage(d, true);
-              swapPage("landing", "user");
+            if(data == "undefined"){
+              // console.log("data for user is undefined, creating user");
+              // let user_data = {"last_login": d, "stress":["0"]};
+              // create_user(id, user_data);
+              // populateUserPage(d, true);
+              // swapPage("landing", "user");
             }else{
         
             const date = data.last_login;
@@ -643,7 +649,7 @@ function create_user(id, user_data){
                 url: endpoint + userID,
             }).done(
             function(data){
-             
+             console.log("creating user");
         console.log("Data: " + JSON.stringify(data));
        
       });
@@ -700,6 +706,13 @@ function get_garden_data(){
             function(data){
         console.log("Data: " + JSON.stringify(data));
         u_data = data;
+        if(data == "undefined"){
+        console.log("data for user is undefined, creating user");
+        let user_data = {"last_login": d, "stress":["0"]};
+        create_user(id, user_data);
+        populateUserPage(d, true);
+        swapPage("landing", "user");
+        }
         
       });
         });

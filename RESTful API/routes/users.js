@@ -35,11 +35,30 @@ const userRoutes = (app, fs) => {
         });
     };
 
+    const appendFile = (
+        fileData,
+        callback,
+        filePath = dataPath,
+        encoding = 'utf8'
+        ) => {
+    
+        fs.appendFile(filePath, fileData, encoding, (err) => {
+            if (err) {
+                throw err;
+            }
+
+            callback();
+          });
+        };
+    
     // READ
     app.post('/garden', (req, res) => {
+        data = null;
         fs.readFile(dataPath, 'utf8', (err, data) => {
             console.log("post rec");
             data = JSON.parse(data);
+            if(data != undefined){
+            console.log("data = ", data);
             
             //1. is the last average taken farther away in time from the oldest reading than the window size?
             // if yes ==> then calculate a new average.
@@ -130,7 +149,7 @@ const userRoutes = (app, fs) => {
             });
            
             
-        });
+        }});
     });
 
        // READ
@@ -143,7 +162,7 @@ const userRoutes = (app, fs) => {
             let stress_user = data[uid]['stress'];
             res.status(200).send(stress_user);
             }else{
-                res.status(200).send("no user");
+                res.status(200).send("undefined");
             }
         });
     });
@@ -170,6 +189,7 @@ const userRoutes = (app, fs) => {
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send('date');
             });
+           
         },
             true);
     });
@@ -177,19 +197,24 @@ const userRoutes = (app, fs) => {
 
     // UPDATE
     app.put('/users/:id', (req, res) => {
-
+        data = null;
         readFile(data => {
-
+            if(data != undefined){
+                console.log("pulling data ", data);
             // add the new user
+
             const userId = req.params["id"];
             data[userId] = req.body;
             console.log(userId);
             console.log(req.body);
-
+            console.log("data = ", data);
+            // appendFile(JSON.stringify(data, null, 2), () => {
+            //     res.status(200).send(`users id:${userId} updated`);
+            // });
             writeFile(JSON.stringify(data, null, 2), () => {
                 res.status(200).send(`users id:${userId} updated`);
             });
-        },
+        }},
             true);
     });
 
