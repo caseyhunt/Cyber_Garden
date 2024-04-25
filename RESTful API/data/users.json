@@ -1,56 +1,29 @@
 {
   "garden": {
-    "stress": [],
+    "stress": [
+      "24",
+      "Apr 01 2024 12:47:42 GMT-0600 (Mountain Daylight Time)",
+      "32",
+      "Wed Apr 24 2024 19:22:17 GMT-0600 (Mountain Daylight Time)"
+    ],
     "stress_queue": [
-      "24.200000000000003",
-      "Thu Apr 04 2024 12:47:42 GMT-0600 (Mountain Daylight Time)",
-      "35.300000000000004",
-      "Thu Apr 04 2024 12:59:31 GMT-0600 (Mountain Daylight Time)",
-      "26.900000000000002",
-      "Thu Apr 04 2024 13:00:40 GMT-0600 (Mountain Daylight Time)",
-      "24.9",
-      "Thu Apr 04 2024 13:04:08 GMT-0600 (Mountain Daylight Time)",
-      "58.10000000000001",
-      "Thu Apr 04 2024 13:24:37 GMT-0600 (Mountain Daylight Time)"
+      "46.50000000000001",
+      "Wed Apr 24 2024 19:23:02 GMT-0600 (Mountain Daylight Time)"
     ]
   },
   "anonymous": {
-    "name": [
-      "anonymous",
-      "anonymous"
-    ],
-    "email": "anonymous@anonymous",
-    "degree": "anon",
-    "contact": "anon",
     "last_login": "Thu Apr 04 2024 13:24:37 GMT-0600 (Mountain Daylight Time)",
-    "stress": [
-      "#97ff7a",
-      "58.10000000000001",
-      "Thu Apr 04 2024 13:24:37 GMT-0600 (Mountain Daylight Time)",
-      "#ff5490",
-      "24.9",
-      "Thu Apr 04 2024 13:04:08 GMT-0600 (Mountain Daylight Time)",
-      "#6efdff",
-      "26.900000000000002",
-      "Thu Apr 04 2024 13:00:40 GMT-0600 (Mountain Daylight Time)"
-    ]
+    "stress": []
   },
-  "041851FA0D5980": {
-    "name": [
-      "Casey",
-      "Hunt"
-    ],
-    "email": "casey.hunt@colorado.edu",
-    "degree": "dr",
-    "contact": "y",
-    "last_login": "Thu Apr 04 2024 12:59:31 GMT-0600 (Mountain Daylight Time)",
+  "TESTING": {
+    "last_login": "Wed Apr 24 2024 19:23:02 GMT-0600 (Mountain Daylight Time)",
     "stress": [
-      "#ffb9a3",
-      "35.300000000000004",
-      "Thu Apr 04 2024 12:59:31 GMT-0600 (Mountain Daylight Time)",
-      "#ffb700",
-      "24.200000000000003",
-      "Thu Apr 04 2024 12:47:42 GMT-0600 (Mountain Daylight Time)",
+      "#59ffde",
+      "46.50000000000001",
+      "Wed Apr 24 2024 19:23:02 GMT-0600 (Mountain Daylight Time)",
+      "#ffed94",
+      "32.2",
+      "Wed Apr 24 2024 19:22:17 GMT-0600 (Mountain Daylight Time)",
       "0"
     ]
   }

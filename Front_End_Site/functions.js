@@ -90,7 +90,8 @@ function swapPage(oldPage, newPage){
       alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
       console.log("testing");
       console.log(user_values[pageno]);
-      console.log(page_no);
+      console.log(pageno);
+      console.log(user_values);
   }else if(oldPage == "question4" && user_values[4] == undefined){
     alert("It looks like you have not reported a value for this question. Please give a response before proceeding.");
   }else if(oldPage == "question5" && user_values[5] == undefined){
@@ -443,7 +444,7 @@ function verifyRegForm(){
   let user_data = {"name": [fname, lname], "email": email, "degree": checkedRadio.value, "contact": checkedRadio_1.value, "last_login": d, "stress":["0"]};
   if("string" == typeof fname && "string" == typeof lname && isemail){
     console.log("form completed " + fname + " " + lname);
-    populateUserPage(fname, d, true);
+    populateUserPage( d, true);
     create_user(user_id, user_data);
     swapPage("user_reg", "user");
   }else{
@@ -462,20 +463,20 @@ function isEmail(email){
 
 //*******POPULATE USER PAGE**********
 //user landing page populated with name and days since last visit
-function populateUserPage(name, date, first_visit){
+function populateUserPage(date, first_visit){
   console.log(date);
 
   if(first_visit != true){
     let days = new Date(date);
     days = daysSince(days).toString();
     console.log('days since ' + daysSince(days));
-    document.getElementById("uname").innerHTML = "Back "+ name;
+    // document.getElementById("uname").innerHTML = "Back "+ name;
     //to-do: add math for weeks/months?
     document.getElementById("itsbeen").innerHTML = "It's been " + days + " days since we last saw you.";
 
   }else{
 
-    document.getElementById("uname").innerHTML = name;
+    // document.getElementById("uname").innerHTML = name;
     document.getElementById('itsbeen').innerHTML = "This is your first visit! Thank you for trying our project.";
   }
 }
@@ -579,12 +580,16 @@ function get_id(id){
             console.log("data returned");
             console.log(data);
             u_data = data;
-            if(data.name === undefined){
-              swapPage("landing", "user_reg");
+            if(data.last_login === undefined){
+              
+              let user_data = {"last_login": d, "stress":["0"]};
+              create_user(id, user_data);
+              populateUserPage(d, true);
+              swapPage("landing", "user");
             }else{
-            const fname = data.name[0];
+        
             const date = data.last_login;
-            populateUserPage(fname, date, false);
+            populateUserPage(date, false);
             // generate_chart(false);//not anonymous
             swapPage("landing", "user");
             return data;
@@ -608,10 +613,13 @@ function get_id_no_swap(id){
             console.log("data returned");
             console.log(data);
             u_data = data;
-            if(data.name === undefined){
-              swapPage("landing", "user_reg");
+          if(data.last_login === undefined){
+              
+              let user_data = {"last_login": d, "stress":["0"]};
+              create_user(id, user_data);
+              populateUserPage(date, true);
             }else{
-            const fname = data.name[0];
+            // const fname = data.name[0];
             const date = data.last_login;
             generate_chart(false);
             return data;
@@ -863,6 +871,7 @@ function generate_chart(isanon){
   
 
   var gardenDataSet = anychart.data.set(garden_history);
+  console.log("garden history:" + garden_data);
 
   if(!isanon){
     var userdataSet = anychart.data.set(user_history);

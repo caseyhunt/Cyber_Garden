@@ -39,7 +39,8 @@ const userRoutes = (app, fs) => {
     app.post('/garden', (req, res) => {
         fs.readFile(dataPath, 'utf8', (err, data) => {
             console.log("post rec");
-            data = JSON.parse(data)
+            data = JSON.parse(data);
+            
             //1. is the last average taken farther away in time from the oldest reading than the window size?
             // if yes ==> then calculate a new average.
             //2. include all values in this average that are within the window size from the oldest reading.
@@ -56,8 +57,10 @@ const userRoutes = (app, fs) => {
             let cur_date = new Date();
             let diff = (last_date.getTime() - cur_date.getTime()) / (1000 * 60 * 60 * 24);
             
+            console.log("queue" + stress_queue);
+            console.log("stress" + stress);
             //this can be set to any size to batch averages, say by week.
-            let window_size = 1;
+            let window_size = 2;
             
             //goal: calculate new average in chunks from stress queue until caught up
             //remove each item in the queue as it is added into average
