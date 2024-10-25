@@ -53,7 +53,7 @@ const userRoutes = (app, fs) => {
         };
     
     // READ
-    app.post('/garden', (req, res) => {
+    app.post('/garden', (req, res, next) => {
         data = null;
         fs.readFile(dataPath, 'utf8', (err, data) => {
             console.log("post rec");
@@ -61,7 +61,27 @@ const userRoutes = (app, fs) => {
             console.log("data = ", data);
             if(data != undefined){
             
+            consolidate_data(data);
+          
+            // if (err) {
+            //     throw err;
+            // }
+            //console.log("writing data from garden ", data);
+            if(data != undefined){
+                let garden_data = data['garden']['stress'];
+                data = JSON.stringify(data, null, 2);
+                
+            writeFile(data, () => {
+                res.status(200).send(garden_data);
+            });
+        }
+           
             
+        }});
+    });
+
+    function consolidate_data(data){
+                    
             //1. is the last average taken farther away in time from the oldest reading than the window size?
             // if yes ==> then calculate a new average.
             //2. include all values in this average that are within the window size from the oldest reading.
@@ -89,15 +109,19 @@ const userRoutes = (app, fs) => {
             let n = 0;
 
             let last_avg_date = new Date(stress[stress.length-1]);
-            let oldest_reading_date = new Date(stress_queue[1]);
+            let oldest_reading_date = new Date(stress_queue[stress_queue.length-1]);
             if(stress.length < 1 || stress == undefined){
                 last_avg_date = new Date();
             }
             let difference = (oldest_reading_date.getTime() - last_avg_date.getTime()) / (1000 * 60 * 60 * 24);
             let next_value;
             let current_date = new Date();
-           
+            console.log("difference", difference);
+            console.log("last avg", last_avg_date);
+            console.log("oldest_reading", oldest_reading_date);
+            console.log("last date", new Date(stress_queue[stress_queue.length-1]));
             while(difference > window_size && stress_queue.length >1){
+                
                 start_of_range = new Date(stress_queue[1]);
                 next_value = new Date(stress_queue[3]);
 
@@ -141,27 +165,7 @@ const userRoutes = (app, fs) => {
                 data['garden']['stress_queue'] = stress_queue;
                 console.log("queue" + stress_queue);
             }
-
-
-
-                
-          
-            // if (err) {
-            //     throw err;
-            // }
-            console.log("writing data from garden ", data);
-            if(data != undefined){
-                let garden_data = data['garden']['stress'];
-                data = JSON.stringify(data, null, 2);
-                
-            writeFile(data, () => {
-                res.status(200).send(garden_data);
-            });
-        }
-           
-            
-        }});
-    });
+    }
 
        // READ
        app.get('/data/:id', (req, res) => {
